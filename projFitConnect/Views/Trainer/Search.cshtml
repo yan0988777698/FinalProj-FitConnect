@@ -23,7 +23,7 @@
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="~/images/model.jpg" class="img-fluid rounded-start" alt="...">
+                <img src="" id="image" class="img-fluid rounded-start" alt="...">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
@@ -80,3 +80,15 @@
         </li>
     </ul>
 </nav>
+<script>
+    (async () => {
+        var response = await fetch("https://localhost:7199/api/Coach");
+        var data = await response.json();
+        console.log(data);
+        const imageUrl = `data:image/jpeg;base64,${data[0].photo}`;
+        document.getElementById('image').src = imageUrl;
+    })();
+
+
+
+</script>
