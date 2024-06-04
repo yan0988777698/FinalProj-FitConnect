@@ -2,9 +2,9 @@
 
 namespace projFitConnect.Controllers
 {
-    public class TrainerController : Controller
+    public class CoachController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Profile()
         {
             return View();
         }

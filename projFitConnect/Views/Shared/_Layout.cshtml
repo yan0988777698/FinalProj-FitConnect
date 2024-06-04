@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - projFitConnect</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
@@ -26,10 +27,10 @@
                             <a class="nav-link text-dark fw-bold p-4" asp-area="" asp-controller="Home" asp-action="Privacy">找健身房</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark fw-bold p-4" asp-area="" asp-controller="Trainer" asp-action="Search">找教練</a>
+                            <a class="nav-link text-dark fw-bold p-4" asp-area="" asp-controller="Coach" asp-action="Search">找教練</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark fw-bold p-4" asp-area="" asp-controller="Home" asp-action="Privacy">找知識</a>
+                            <a class="nav-link text-dark fw-bold p-4" asp-area="" asp-controller="Coach" asp-action="Profile">教練中心</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark fw-bold p-4" asp-area="" asp-controller="Home" asp-action="Privacy">關於我們</a>
