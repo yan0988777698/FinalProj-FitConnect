@@ -50,7 +50,16 @@
 
     <div class="border bg-light d-flex" style="height:50px">
         <div class="border flex-fill text-center align-content-center hover-effect">
-            <a class="d-block nav-link h-100 align-content-center" href="#" id="">教練專區</a>
+            <ul class="nav nav-pills">
+                <li class="nav-item dropdown flex-fill h-100">
+                    <a class="nav-link dropdown-toggle text-primary" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">教練專區</a>
+                    <div class="dropdown-menu w-100" data-popper-placement="bottom-start" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 42px);">
+                        <a class="dropdown-item" href="#">開課</a>
+                        <a class="dropdown-item" href="#">場地</a>
+                        <a class="dropdown-item" href="#">薪資</a>
+                    </div>
+                </li>
+            </ul>
         </div>
         <div class="border flex-fill text-center align-content-center hover-effect">
             <a class="d-block nav-link h-100 align-content-center" href="#">我的課程(0)</a>
@@ -66,7 +75,10 @@
         </div>
     </div>
 
-    <div class="border" style="height:200px">123</div>
+    <div class="border bg-light d-flex" style="height:500px" id="displayDiv">
+        
+    </div>
+
 </div>
 
 @section Styles {
@@ -79,7 +91,7 @@
 
             .hover-effect:hover {
                 background-color: rgba(137, 221, 198);
-                font-size: 1.5em;
+                font-size: 1.25em;
             }
 
     </style>
@@ -87,7 +99,11 @@
 
 @section Scripts {
     <script>
-        document.getElementById('upload').addEventListener('change', (event) => {
+        const upload = document.getElementById('upload');
+        const coachArea = document.getElementById('coachArea');
+        const displayDiv = document.getElementById('displayDiv');
+
+        upload.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -98,9 +114,9 @@
             }
         });
 
-
-
-
+        coachArea.addEventListener('click', async (event) => {
+           
+        });
 
     </script>
 }
