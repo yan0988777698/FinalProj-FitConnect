@@ -6,8 +6,8 @@
         <div class="w-25 border position-relative d-flex justify-content-center" style="height: 200px">
             <img src="~/images/model.jpg" class="position-absolute h-100" id="headshot" />
             <img src="~/images/mask.png" class="position-absolute h-100" />
-            <form><input type="file" id="upload" class="d-none" /></form>
-            <label for="upload" class="btn btn-light position-absolute w-100 bottom-0">更換大頭照</label>
+            <form><input type="file" id="photo" class="d-none" /></form>
+            <label for="photo" class="btn btn-light position-absolute w-100 bottom-0">更換大頭照</label>
         </div>
         <div class="w-75">
             <div class="d-flex align-items-center form-control h-25 fs-4 fw-bold">FITCONNECT教練</div>
@@ -75,8 +75,7 @@
         </div>
     </div>
 
-    <div class="border bg-light d-flex" style="height:500px" id="displayDiv">
-        
+    <div class="border bg-light d-flex form-control" style="height:500px" id="displayDiv">
     </div>
 
 </div>
@@ -99,12 +98,11 @@
 
 @section Scripts {
     <script>
-        const upload = document.getElementById('upload');
-        const coachArea = document.getElementById('coachArea');
+        const photo = document.getElementById('photo');
         const displayDiv = document.getElementById('displayDiv');
-        const openedCourse = documnet.getElementById('openedCourse');
+        const openedCourse = document.getElementById('openedCourse');
 
-        upload.addEventListener('change', (event) => {
+        photo.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -115,8 +113,46 @@
             }
         });
 
-        coachArea.addEventListener('click', async (event) => {
-           
+        openedCourse.addEventListener('click', async (event) => {
+            const updateUrl = '@Url.Content("~/Schdule/Update/")';
+            const deleteUrl = '@Url.Content("~/Schdule/Delete/")';
+            const response = await fetch("https://localhost:7199/api/Coach/6");
+            const data = await response.json();
+            console.log(data.scheduleDatailDtos);
+            let innerHTML = "";
+            data.scheduleDatailDtos.forEach(item => {
+                innerHTML += `<tr style="height:1em">
+                                    <td>${item.class}</td>
+                                    <td>${item.courseTime}</td>
+                                    <td>${item.courseDate}</td>
+                                    <td>${item.field}</td>
+                                    <td>${item.maxStudent}</td>
+                                    <td>
+                                        <div class="w-75" >
+                                            <a class="btn btn-primary mx-2" href="${updateUrl}${item.classScheduleId}">
+                                                <i class="bi bi-pencil-square"></i>編輯
+                                            </a>
+                                            <a class="btn btn-danger mx-2" href="${deleteUrl}${item.classScheduleId}">
+                                                <i class="bi bi-trash3"></i>刪除
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>`
+            });
+            const outerHTML = `<table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">課程名稱</th>
+                                            <th scope="col">時間</th>
+                                            <th scope="col">日期</th>
+                                            <th scope="col">教室</th>
+                                            <th scope="col">人數上限</th>
+                                            <th scope="col">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${innerHTML}</tbody>
+                                </table>`;
+            displayDiv.innerHTML = outerHTML;
         });
 
     </script>
