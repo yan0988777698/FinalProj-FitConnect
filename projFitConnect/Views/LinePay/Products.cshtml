@@ -3,15 +3,21 @@
     int id = ViewBag.id;
 }
 
-<h2>LinePay 結帳</h2>
+<div class="fw-bolder fs-5"><i class="bi bi-cart4 mx-1"></i><span>購物車</span></div>
 <!-- 商品畫面 -->
 <div class="container">
     <table class="mx-auto table table-hover mb-5">
         <thead>
             <tr>
+                <th>
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
+                    <label class="form-check-label" for="flexCheckDefault">
+                        全選
+                    </label>
+                </th>
                 <th scope="col">課程</th>
                 <th scope="col">教練</th>
-                <th scope="col">價格</th>
+                <th scope="col">售價</th>
             </tr>
         </thead>
         <tbody id="tbody"></tbody>
@@ -40,9 +46,10 @@
             data.reserveDetailDtos.forEach(item => {
                 sum += item.courseFee;
                 innerHTML += `<tr>
+                                <td class="align-content-center"><input class="form-check-input" type="checkbox" value="" id=""/></td>
                                 <td class="align-content-center">${item.class}</td>
                                 <td class="align-content-center">${item.coach}</td>
-                                <td class="align-content-center">${item.courseFee}</td>
+                                <td class="align-content-center">NT$${item.courseFee}</td>
                              </tr>`
             });
             tbody.innerHTML = innerHTML;
