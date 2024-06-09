@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    <div class="border bg-light d-flex form-control" style="height:500px" id="displayDiv">
+    <div class="border d-flex form-control" style="height:500px" id="displayDiv">
     </div>
 
 </div>
@@ -121,7 +121,7 @@
             console.log(data.scheduleDatailDtos);
             let innerHTML = "";
             data.scheduleDatailDtos.forEach(item => {
-                innerHTML += `<tr style="height:1em">
+                innerHTML += `<tr">
                                     <td>${item.class}</td>
                                     <td>${item.courseTime}</td>
                                     <td>${item.courseDate}</td>
