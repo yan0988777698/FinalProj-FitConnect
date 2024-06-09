@@ -4,8 +4,9 @@ namespace projFitConnect.Controllers
 {
     public class LinePayController : Controller
     {
-        public IActionResult Products()
+        public IActionResult Products(int id)
         {
+            ViewBag.id = id;
             return View();
         }
         public IActionResult Confirm()
