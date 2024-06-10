@@ -6,26 +6,29 @@
 <div class="fw-bolder fs-5"><i class="bi bi-cart4 mx-1"></i><span>購物車</span></div>
 <!-- 商品畫面 -->
 <div class="container">
-    <table class="mx-auto table table-hover mb-5">
+    <table class="mx-auto table table-hover mb-5 mt-5">
         <thead>
-            <tr>
+            <tr class="shadow">
                 <th>
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                    <label class="form-check-label" for="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" value="" id="allChecked" checked="" />
+                    <label class="form-check-label" for="allChecked">
                         全選
                     </label>
                 </th>
-                <th scope="col">課程</th>
+                <th scope="col">課程名稱</th>
                 <th scope="col">教練</th>
                 <th scope="col">售價</th>
             </tr>
         </thead>
         <tbody id="tbody"></tbody>
     </table>
-    <hr />
-    <div class="form-label form-control" id="sumDiv"></div>
-    <button class="btn btn-danger" onclick="goBack()">取消</button>
-    <button class="btn btn-success" onclick="requestPayment()"> Line Pay 付款</button>
+
+    <div class="form-label form-control shadow" id="sumDiv"></div>
+    <div class="w-100">
+        <button class="btn btn-success w-50" onclick="requestPayment()" id="btnPay">前往付款</button>
+        <button class="btn btn-danger" onclick="goBack()">取消</button>
+    </div>
+    
 </div>
 
 @section Scripts {
@@ -33,29 +36,65 @@
         let baseLoginPayUrl = 'https://localhost:7199/api/LinePay/';
         const tbody = document.getElementById('tbody');
         const sumDiv = document.getElementById('sumDiv');
+        const allChecked = document.getElementById('allChecked');
         const id = @id;
         let sum = 0;
-        
+
         (async () => {
             const response = await fetch(`https://localhost:7199/api/Member/${id}`);
             const data = await response.json();
             data.reserveDetailDtos = data.reserveDetailDtos.filter(item => !item.paymentStatus);
             console.log(data.reserveDetailDtos);
             let innerHTML = "";
-            
+
             data.reserveDetailDtos.forEach(item => {
                 sum += item.courseFee;
-                innerHTML += `<tr>
-                                <td class="align-content-center"><input class="form-check-input" type="checkbox" value="" id=""/></td>
-                                <td class="align-content-center">${item.class}</td>
-                                <td class="align-content-center">${item.coach}</td>
-                                <td class="align-content-center">NT$${item.courseFee}</td>
-                             </tr>`
+                innerHTML += `<tr class="shadow">
+                                  <td class="align-content-center"><input class="form-check-input" type="checkbox" value="${item.courseFee}" id="" checked=""/></td>
+                                  <td class="align-content-center">${item.class}</td>
+                                  <td class="align-content-center">${item.coach}</td>
+                                  <td class="align-content-center">NT$${item.courseFee}</td>
+                              </tr>`
             });
             tbody.innerHTML = innerHTML;
             sumDiv.innerHTML = `總金額:${sum}`;
             payment.amount = payment.packages[0].amount = payment.packages[0].products[0].price = sum;
+
+            const formCheckInput = document.querySelectorAll('.form-check-input');
+            allChecked.addEventListener('click', () => {
+                sum = 0;
+                if (!allChecked.checked) {
+                    formCheckInput.forEach(item => {
+                        item.checked = false;
+                    });
+                } else {
+                    formCheckInput.forEach(item => {
+                        sum += Number(item.value);
+                        item.checked = true;
+                    });
+                }
+                sumDiv.innerHTML = `總金額:${sum}`;
+                payment.amount = payment.packages[0].amount = payment.packages[0].products[0].price = sum;
+            });
+            formCheckInput.forEach(item => {
+                item.addEventListener('click', (event) => {
+                    if (event.target.id == "allChecked")
+                        return;
+                    allChecked.checked = false;
+                    sum = 0;
+                    formCheckInput.forEach(item => {
+                        if (item.checked) {
+                            sum += Number(item.value);
+                        }
+                    });
+                    sumDiv.innerHTML = `總金額:${sum}`;
+                    payment.amount = payment.packages[0].amount = payment.packages[0].products[0].price = sum;
+                });
+            });
+
+
         })();
+
         function goBack() {
             window.history.back();
         }
