@@ -6,7 +6,7 @@
 <div class="fw-bolder fs-5"><i class="bi bi-cart4 mx-1"></i><span>購物車</span></div>
 <!-- 商品畫面 -->
 <div class="container">
-    <table class="mx-auto table table-hover mb-5 mt-5">
+    <table class="mx-auto table table-hover mb-1 mt-5">
         <thead>
             <tr class="shadow">
                 <th>
@@ -24,9 +24,13 @@
     </table>
 
     <div class="form-label form-control shadow" id="sumDiv"></div>
-    <div class="w-100">
-        <button class="btn btn-success w-50" onclick="requestPayment()" id="btnPay">前往付款</button>
-        <button class="btn btn-danger" onclick="goBack()">取消</button>
+    <div class="row my-5">
+        <div class="col-6 col-md-3">
+            <button class="btn btn-success col-6 col-md-3 form-control" onclick="requestPayment()" id="btnPay">前往付款</button>
+        </div>
+        <div class="col-6 col-md-3">
+            <button class="btn btn-danger col-6 col-md-3 form-control" onclick="goBack()">取消</button>
+        </div>
     </div>
     
 </div>

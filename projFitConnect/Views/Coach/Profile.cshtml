@@ -24,7 +24,7 @@
                 <div class="w-25 d-flex align-items-center justify-content-evenly">
                     <i class="bi bi-calendar-event" style="font-size: 2rem; color: rgb(87, 198, 163);"></i>
                     <div class="d-flex flex-column align-items-center">
-                        <span class="fw-bold">累計課程</span>
+                        <span class="fw-bold" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="您目前已完成的課程總時數">累計課程</span>
                         <span class="fw-bold">--</span>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                 <div class="w-25 d-flex align-items-center justify-content-evenly">
                     <i class="bi bi-balloon-heart-fill" style="font-size: 2rem; color: rgb(87, 198, 163);"></i>
                     <div class="d-flex flex-column align-items-center">
-                        <span class="fw-bold">追蹤教練</span>
+                        <span class="fw-bold"></span>
                         <span class="fw-bold">--</span>
                     </div>
                 </div>
@@ -68,10 +68,10 @@
             <a class="d-block nav-link h-100 align-content-center" href="#" id="myOrder">我的訂單(0)</a>
         </div>
         <div class="border flex-fill text-center align-content-center hover-effect">
-            <a class="d-block nav-link h-100 align-content-center" href="#">我的蒐藏</a>
+            <a class="d-block nav-link h-100 align-content-center" href="#">我的收藏</a>
         </div>
         <div class="border flex-fill text-center align-content-center hover-effect">
-            <a class="d-block nav-link h-100 align-content-center" href="#">我想要...</a>
+            <a class="d-block nav-link h-100 align-content-center" href="#">我的追蹤</a>
         </div>
     </div>
 
@@ -109,7 +109,9 @@
         const myCourse = document.getElementById('myCourse');
         const memebrID = 2;
         const coachID = 6;
-
+        //Enable tooltips
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
         //頁面載入時執行
         document.addEventListener('DOMContentLoaded', async () => {
             let response = await fetch(`https://localhost:7199/api/Coach/${coachID}`);
