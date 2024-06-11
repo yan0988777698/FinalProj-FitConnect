@@ -3,16 +3,17 @@
 }
 <input type="hidden" id="sum" value="@sum" />
 
-<h1>Pay</h1>
+<h3 class="fw-bolder text-center">訂單資訊</h3>
+<hr />
 
 <div class="d-flex align-items-center">
-    <i class="bi bi-credit-card"></i>
+    <i class="bi bi-credit-card fs-3"></i>
     <span class="fw-bolder fs-5 mx-3">付款方式</span>
 </div>
 
 <div class="btn-group mt-3" role="group" aria-label="Basic radio toggle button group">
     <input type="radio" class="btn-check" name="btnradioPay" id="btnradio1" autocomplete="off" checked>
-    <label class="btn btn-lg btn-outline-primary" for="btnradio1">Line Pay</label>
+    <label class="btn btn-lg btn-outline-primary" for="btnradio1">LINE Pay</label>
 </div>
 
 <div class="shadow col-md-6 text-center d-flex flex-row p-3 justify-content-around mt-3">
@@ -26,7 +27,7 @@
 </div>
 
 <div class="d-flex align-items-center mt-3">
-    <i class="bi bi-receipt-cutoff"></i>
+    <i class="bi bi-receipt-cutoff fs-3"></i>
     <span class="fw-bolder fs-5 mx-3">發票</span>
 </div>
 <div class="btn-group mt-3" role="group" aria-label="Basic radio toggle button group">
@@ -37,7 +38,18 @@
     <input type="radio" class="btn-check" name="btnradioReceipt" id="btnradioDonate" autocomplete="off" checked>
     <label class="btn btn-lg btn-outline-primary" for="btnradioDonate">捐贈發票</label>
 </div>
-
+<div class="d-flex align-items-center mt-3">
+    <i class="bi bi-person fs-3"></i>
+    <span class="fw-bolder fs-5 mx-3">個人資訊</span>
+</div>
+<form>
+    <div class="row">
+        <label for="exampleInputEmail1" class="form-label mt-4">收件人姓名</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="*請輸入姓名">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+</form>
+<div id="payment-button"></div>
 <button class="btn btn-success col-6 col-md-3 form-control my-5" onclick="requestPayment()" id="btnPay">前往付款</button>
 
 @section Scripts {
@@ -91,6 +103,27 @@
                 console.error('Error:', err);
             }
         }
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+            // Set up the transaction
+            createOrder: function (data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '88.44'
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (orderData) {
+                    console.log('Capture result', orderData,
+                        JSON.stringify(orderData, null, 2));
+                });
+            }
+        }).render('#payment-button');
     </script>
 }
 @section Styles {
