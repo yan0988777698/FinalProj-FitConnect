@@ -4,21 +4,38 @@
 <input type="hidden" id="sum" value="@sum" />
 
 <h1>Pay</h1>
-<div class="d-flex align-items-center"><i class="bi bi-credit-card"></i><span class="fw-bolder fs-5 mx-3">付款方式</span></div>
-<div class="btn-group d-flex flex-column row" role="group" aria-label="Basic radio toggle button group">
-    <div class="col-md-5">
-        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="">
-        <label class="btn btn-lg btn-outline-success" for="btnradio1">Line Pay</label>
+
+<div class="d-flex align-items-center">
+    <i class="bi bi-credit-card"></i>
+    <span class="fw-bolder fs-5 mx-3">付款方式</span>
+</div>
+
+<div class="btn-group mt-3" role="group" aria-label="Basic radio toggle button group">
+    <input type="radio" class="btn-check" name="btnradioPay" id="btnradio1" autocomplete="off" checked>
+    <label class="btn btn-lg btn-outline-primary" for="btnradio1">Line Pay</label>
+</div>
+
+<div class="shadow col-md-6 text-center d-flex flex-row p-3 justify-content-around mt-3">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <div>使用 LINE Pay 付款</div>
+        <ul style="margin:0"><li class="form-text text-muted">確認付款後，畫面將跳轉至 LINE Pay 付款頁面</li></ul>
     </div>
-    <div class="shadow col-md-6 text-center d-flex flex-row p-3 justify-content-around">
-        <div class="d-flex flex-column justify-content-center align-items-center">
-            <div>使用 LINE Pay 付款</div>
-            <ul style="margin:0"><li class="form-text text-muted">確認付款後，畫面將跳轉至 LINE Pay 付款頁面</li></ul>
-        </div>
-        <div class="align-content-center">
-            <img src="~/Images/LinePay.png" style="width:84px;height:24px" />
-        </div>
+    <div class="align-content-center">
+        <img src="~/Images/LinePay.png" style="width:84px;height:24px" />
     </div>
+</div>
+
+<div class="d-flex align-items-center mt-3">
+    <i class="bi bi-receipt-cutoff"></i>
+    <span class="fw-bolder fs-5 mx-3">發票</span>
+</div>
+<div class="btn-group mt-3" role="group" aria-label="Basic radio toggle button group">
+    <input type="radio" class="btn-check" name="btnradioReceipt" id="btnradioPersonal" autocomplete="off" checked>
+    <label class="btn btn-lg btn-outline-primary" for="btnradioPersonal">個人發票</label>
+    <input type="radio" class="btn-check" name="btnradioReceipt" id="btnradioCompany" autocomplete="off" checked>
+    <label class="btn btn-lg btn-outline-primary" for="btnradioCompany">公司發票</label>
+    <input type="radio" class="btn-check" name="btnradioReceipt" id="btnradioDonate" autocomplete="off" checked>
+    <label class="btn btn-lg btn-outline-primary" for="btnradioDonate">捐贈發票</label>
 </div>
 
 <button class="btn btn-success col-6 col-md-3 form-control my-5" onclick="requestPayment()" id="btnPay">前往付款</button>
@@ -27,6 +44,7 @@
     <script>
         let baseLoginPayUrl = 'https://localhost:7199/api/LinePay/';
         const sum = document.getElementById('sum').value;
+        const btnradioPersonal = document.getElementById('btnradioPersonal');
         // 交易訂單資料
         const payment = {
             amount: sum,
