@@ -1,7 +1,7 @@
 ﻿@{
-    ViewData["Title"] = "Products";
-    int id = ViewBag.id;
+    var memberId = ViewBag.memberId;
 }
+<input type="hidden" id="memberId" value="@memberId" />
 
 <div class="fw-bolder fs-5"><i class="bi bi-cart4 mx-1"></i><span>購物車</span></div>
 <!-- 商品畫面 -->
@@ -26,26 +26,28 @@
     <div class="form-label form-control shadow" id="sumDiv"></div>
     <div class="row my-5">
         <div class="col-6 col-md-3">
-            <button class="btn btn-success col-6 col-md-3 form-control" onclick="requestPayment()" id="btnPay">前往付款</button>
+            <form asp-action="Pay" method="post">
+                <input type="number" id="formSum" name="sum" value="" hidden />
+                <button type="submit" class="btn btn-success col-6 col-md-3 form-control" id="btnCheckOut">前往結帳</button>
+            </form>
         </div>
         <div class="col-6 col-md-3">
             <button class="btn btn-danger col-6 col-md-3 form-control" onclick="goBack()">取消</button>
         </div>
     </div>
-    
 </div>
 
 @section Scripts {
     <script>
-        let baseLoginPayUrl = 'https://localhost:7199/api/LinePay/';
         const tbody = document.getElementById('tbody');
         const sumDiv = document.getElementById('sumDiv');
         const allChecked = document.getElementById('allChecked');
-        const id = @id;
+        const formSum = document.getElementById('formSum');
+        const memberId = document.getElementById('memberId').value;
         let sum = 0;
 
         (async () => {
-            const response = await fetch(`https://localhost:7199/api/Member/${id}`);
+            const response = await fetch(`https://localhost:7199/api/Member/${memberId}`);
             const data = await response.json();
             data.reserveDetailDtos = data.reserveDetailDtos.filter(item => !item.paymentStatus);
             console.log(data.reserveDetailDtos);
@@ -62,7 +64,7 @@
             });
             tbody.innerHTML = innerHTML;
             sumDiv.innerHTML = `總金額:${sum}`;
-            payment.amount = payment.packages[0].amount = payment.packages[0].products[0].price = sum;
+            formSum.value = sum;
 
             const formCheckInput = document.querySelectorAll('.form-check-input');
             allChecked.addEventListener('click', () => {
@@ -78,7 +80,7 @@
                     });
                 }
                 sumDiv.innerHTML = `總金額:${sum}`;
-                payment.amount = payment.packages[0].amount = payment.packages[0].products[0].price = sum;
+                formSum.value = sum;
             });
             formCheckInput.forEach(item => {
                 item.addEventListener('click', (event) => {
@@ -92,61 +94,14 @@
                         }
                     });
                     sumDiv.innerHTML = `總金額:${sum}`;
-                    payment.amount = payment.packages[0].amount = payment.packages[0].products[0].price = sum;
+                    formSum.value = sum;
                 });
             });
-
-
         })();
 
         function goBack() {
             window.history.back();
         }
-        // 交易訂單資料
-        const payment = {
-            amount: 0,
-            currency: "TWD",
-            orderId: Date.now().toString(), // 使用 Timestamp 當作 orderId
-            packages: [
-                {
-                    id: "20240609I001",
-                    amount: 0,
-                    name: "測試",
-                    products: [
-                        {
-                            name: "測試商品",
-                            imageUrl: "",
-                            quantity: 1,
-                            price: 0,
-                        }
-                    ]
-                },
-            ],
-            RedirectUrls: {
-                ConfirmUrl: "https://localhost:7168/LinePay/Confirm",
-                CancelUrl: "https://6531-211-76-57-112.ngrok-free.app/api/LinePay/Cancel",
-            },
-        };
-
-        async function requestPayment() {
-            try {
-                const response = await fetch(baseLoginPayUrl + 'Create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payment),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-
-                const res = await response.json();
-                window.location = res.info.paymentUrl.web;
-            } catch (err) {
-                console.error('Error:', err);
-            }
-        }
+        
     </script>
 }

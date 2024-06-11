@@ -4,9 +4,15 @@ namespace projFitConnect.Controllers
 {
     public class LinePayController : Controller
     {
-        public IActionResult Products(int id)
+        public IActionResult shoppingCart(int id)
         {
-            ViewBag.id = id;
+            ViewBag.memberId = id;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Pay(int sum)
+        {
+            ViewBag.sum = sum;
             return View();
         }
         public IActionResult Confirm()

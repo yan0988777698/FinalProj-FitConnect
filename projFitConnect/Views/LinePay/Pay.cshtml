@@ -1,0 +1,82 @@
+﻿@{
+    var sum = ViewBag.sum;
+}
+<input type="hidden" id="sum" value="@sum" />
+
+<h1>Pay</h1>
+<div class="d-flex align-items-center"><i class="bi bi-credit-card"></i><span class="fw-bolder fs-5 mx-3">付款方式</span></div>
+<div class="btn-group d-flex flex-column row" role="group" aria-label="Basic radio toggle button group">
+    <div class="col-md-5">
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="">
+        <label class="btn btn-lg btn-outline-success" for="btnradio1">Line Pay</label>
+    </div>
+    <div class="shadow col-md-6 text-center d-flex flex-row p-3 justify-content-around">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div>使用 LINE Pay 付款</div>
+            <ul style="margin:0"><li class="form-text text-muted">確認付款後，畫面將跳轉至 LINE Pay 付款頁面</li></ul>
+        </div>
+        <div class="align-content-center">
+            <img src="~/Images/LinePay.png" style="width:84px;height:24px" />
+        </div>
+    </div>
+</div>
+
+<button class="btn btn-success col-6 col-md-3 form-control my-5" onclick="requestPayment()" id="btnPay">前往付款</button>
+
+@section Scripts {
+    <script>
+        let baseLoginPayUrl = 'https://localhost:7199/api/LinePay/';
+        const sum = document.getElementById('sum').value;
+        // 交易訂單資料
+        const payment = {
+            amount: sum,
+            currency: "TWD",
+            orderId: Date.now().toString(), // 使用 Timestamp 當作 orderId
+            packages: [
+                {
+                    id: "20240609I001",
+                    amount: sum,
+                    name: "測試",
+                    products: [
+                        {
+                            name: "測試商品",
+                            imageUrl: "",
+                            quantity: 1,
+                            price: sum,
+                        }
+                    ]
+                },
+            ],
+            RedirectUrls: {
+                ConfirmUrl: "https://localhost:7168/LinePay/Confirm",
+                CancelUrl: "https://6531-211-76-57-112.ngrok-free.app/api/LinePay/Cancel",
+            },
+        };
+
+        async function requestPayment() {
+            try {
+                const response = await fetch(baseLoginPayUrl + 'Create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payment),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+
+                const res = await response.json();
+                window.location = res.info.paymentUrl.web;
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        }
+    </script>
+}
+@section Styles {
+    <style>
+
+    </style>
+}
