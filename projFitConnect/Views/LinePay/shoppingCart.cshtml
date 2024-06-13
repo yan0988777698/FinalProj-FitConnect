@@ -120,8 +120,7 @@
             });
             tbody_product.innerHTML = product_innerHTML;
             //顯示課程及商品總價
-            sumDiv.innerHTML = `總金額:${sum}`;
-            formSum.value = sum;
+            loadSum();
             
             //如果商品數量改變，更新(單價*數量)到對應的checkbox內value屬性，篩選掉沒有被勾選的欄位，呈現被勾選欄位的總價
             const productAmount = document.querySelectorAll('.productAmount');
@@ -189,14 +188,13 @@
         })();
         //計算總金額
         let loadSum = function () {
-            console.log('logSum');
             let checkValues = Array.from(document.querySelectorAll('.check-value'));
             checkValues = checkValues.filter(x => x.checked == true);
             sum = 0;
             checkValues.forEach(input => {
                 sum += parseInt(input.value);
             })
-            sumDiv.innerHTML = `總金額:${sum}`;
+            sumDiv.innerHTML = `總金額:NT${sum}`;
             formSum.value = sum;
         };
 
@@ -207,7 +205,7 @@
             formCoursePrice.value = 0;
             formProductCount.value = 0;
             formProductPrice.value = 0;
-            // 計算課程相關部分
+            // 計算課程金額(篩選被勾選的欄位)
             let course_formCheckInput = Array.from(document.querySelectorAll('.course .form-check-input'));
             course_formCheckInput = course_formCheckInput.filter(x => x.checked == true);
             formCourseCount.value = parseInt(course_formCheckInput.length);
@@ -215,20 +213,21 @@
             course_formCheckInput.forEach(item => {
                 sumCourse += parseInt(item.value);
             });
+            //紀錄課程總金額
             formCoursePrice.value = sumCourse;
 
-            // 計算產品相關部分
+            // 計算產品金額(篩選被勾選的欄位)
             let product_formCheckInput = Array.from(document.querySelectorAll('.product .form-check-input'));
             product_formCheckInput = product_formCheckInput.filter(x => x.checked == true);
-
             sumProduct = 0;
             product_formCheckInput.forEach(item => {
                 const quantity = parseInt(item.closest('tr').querySelector('.productAmount').value);
                 formProductCount.value = parseInt(formProductCount.value) + quantity;
                 sumProduct += parseInt(item.value);
             });
+            //紀錄產品總金額
             formProductPrice.value = sumProduct;
-
+            //計算課程與產品總金額
             sum = sumCourse + sumProduct;
             
             this.submit();
