@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using projFitConnect.ViewModels;
 
 namespace projFitConnect.Controllers
 {
@@ -10,10 +11,9 @@ namespace projFitConnect.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Pay(int sum)
+        public IActionResult Pay(PayVM payVM)
         {
-            ViewBag.sum = sum;
-            return View();
+            return View(payVM);
         }
         public IActionResult Confirm()
         {

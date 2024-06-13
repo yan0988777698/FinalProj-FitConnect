@@ -52,8 +52,12 @@
 
 <div class="row my-5">
     <div class="col-6 col-md-3">
-        <form asp-action="Pay" method="post">
-            <input type="number" id="formSum" name="sum" value="" hidden />
+        <form asp-action="Pay" method="post" id="checkoutForm">
+            <input type="number" id="formCourseCount" name="courseCount" hidden />
+            <input type="number" id="formCoursePrice" name="coursePrice" hidden />
+            <input type="number" id="formProductCount" name="productCount" value="0" hidden />
+            <input type="number" id="formProductPrice" name="productPrice" value="0" hidden />
+            <input type="number" id="formSum" name="sum" hidden />
             <button type="submit" class="btn btn-success col-6 col-md-3 form-control" id="btnCheckOut">前往結帳</button>
         </form>
     </div>
@@ -71,8 +75,16 @@
         const allChecked_course = document.getElementById('allChecked_course');
         const allChecked_product = document.getElementById('allChecked_product');
         const formSum = document.getElementById('formSum');
+        const formCourseCount = document.getElementById('formCourseCount');
+        const formCoursePrice = document.getElementById('formCoursePrice');
+        const formProductCount = document.getElementById('formProductCount');
+        const formProductPrice = document.getElementById('formProductPrice');
+
+
         const memberId = document.getElementById('memberId').value;
         let sum = 0;
+        let sumCourse = 0;
+        let sumProduct = 0;
 
         (async () => {
             //課程載入購物車
@@ -89,7 +101,7 @@
                                             <td class="align-content-center">${item.class}</td>
                                             <td class="align-content-center">${item.coach}</td>
                                             <td class="align-content-center">NT$${item.courseFee}</td>
-                                        </tr>`
+                                        </tr>`;
             });
             tbody_course.innerHTML = course_innerHTML;
 
@@ -97,19 +109,17 @@
             const response_product = await fetch(`https://localhost:7199/api/Shoppingcarts/${memberId}`);
             const data_product = await response_product.json();
             let product_innerHTML = "";
-            console.log(data_product);
             data_product.forEach(item => {
-                sum += item.unitPrice;
+                sum += item.unitPrice * item.quantity;
                 product_innerHTML += `<tr class="shadow product">
-                                            <td class="align-content-center"><input class="form-check-input product-checkbox check-value" type="checkbox" value="${item.unitPrice}" id="" checked=""/></td>
+                                            <td class="align-content-center"><input class="form-check-input product-checkbox check-value" type="checkbox" value="${item.unitPrice * item.quantity}" id="" checked=""/></td>
                                             <td class="align-content-center">${item.productName}</td>
-                                            <td class="align-content-center"><input type="number" data-unit-price="${item.unitPrice}" class="form form-control productAmount" value="1" min="1" max="10"></td>
+                                            <td class="align-content-center"><input type="number" data-unit-price="${item.unitPrice}" class="form form-control productAmount" value="${item.quantity}" min="1" max="10"></td>
                                             <td class="align-content-center">NT$${item.unitPrice}</td>
-                                        </tr>`
+                                        </tr>`;
             });
             tbody_product.innerHTML = product_innerHTML;
-
-            //顯示課程及商品總價(每項商品數量先預設為1，去計算總價)
+            //顯示課程及商品總價
             sumDiv.innerHTML = `總金額:${sum}`;
             formSum.value = sum;
             
@@ -125,7 +135,7 @@
 
             //處理課程表格邏輯//
             //選取全部課程項目的checkbox(不含課程全選按鈕)
-            const course_formCheckInput = document.querySelectorAll('.course .form-check-input');
+            let course_formCheckInput = document.querySelectorAll('.course .form-check-input');
             //課程-全選按鈕被點擊(課程表格內的項目全選選取、全部取消)
             allChecked_course.addEventListener('click', () => {
                 if (!allChecked_course.checked) {
@@ -152,7 +162,7 @@
 
             //處理商品表格邏輯//
             //選取全部商品項目的checkbox(不含商品全選按鈕)
-            const product_formCheckInput = document.querySelectorAll('.product .form-check-input');
+            let product_formCheckInput = document.querySelectorAll('.product .form-check-input');
             //商品-全選按鈕被點擊(商品表格內的項目全選選取、全部取消)
             allChecked_product.addEventListener('click', () => {
                 if (!allChecked_product.checked) {
@@ -190,6 +200,39 @@
             formSum.value = sum;
         };
 
+        //提交表單
+        checkoutForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            formCourseCount.value = 0;
+            formCoursePrice.value = 0;
+            formProductCount.value = 0;
+            formProductPrice.value = 0;
+            // 計算課程相關部分
+            let course_formCheckInput = Array.from(document.querySelectorAll('.course .form-check-input'));
+            course_formCheckInput = course_formCheckInput.filter(x => x.checked == true);
+            formCourseCount.value = parseInt(course_formCheckInput.length);
+            sumCourse = 0;
+            course_formCheckInput.forEach(item => {
+                sumCourse += parseInt(item.value);
+            });
+            formCoursePrice.value = sumCourse;
+
+            // 計算產品相關部分
+            let product_formCheckInput = Array.from(document.querySelectorAll('.product .form-check-input'));
+            product_formCheckInput = product_formCheckInput.filter(x => x.checked == true);
+
+            sumProduct = 0;
+            product_formCheckInput.forEach(item => {
+                const quantity = parseInt(item.closest('tr').querySelector('.productAmount').value);
+                formProductCount.value = parseInt(formProductCount.value) + quantity;
+                sumProduct += parseInt(item.value);
+            });
+            formProductPrice.value = sumProduct;
+
+            sum = sumCourse + sumProduct;
+            
+            this.submit();
+        });
         function goBack() {
             window.history.back();
         };
