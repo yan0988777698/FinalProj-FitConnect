@@ -76,10 +76,9 @@
     </div>
 
     <div class="border form-control" style="height:500px" id="displayDiv">
-        
+        <!--內容呈現於此-->
     </div>
-
-    
+        
 </div>
 
 @section Styles {
@@ -126,6 +125,7 @@
             let numebrOfOrder = data.reserveDetailDtos.filter(item => !item.paymentStatus).length;
             myCourse.innerHTML = `我的課程(${numberOfPaied})`;
             myOrder.innerHTML = `我的訂單(${numebrOfOrder})`;
+            findCourse();
         });
 
         //我的課程(已付款課程)
@@ -226,11 +226,14 @@
 
         //查詢已開課程
         openedCourse.addEventListener('click', async (event) => {
+            findCourse();
+        });
+
+        async function findCourse(){
             const updateUrl = '@Url.Content("~/Schdule/Update/")';
             const deleteUrl = '@Url.Content("~/Schdule/Delete/")';
             let response = await fetch("https://localhost:7199/api/Coach/6");
             let data = await response.json();
-            console.log(data.scheduleDatailDtos);
             let innerHTML = "";
             for (const item of data.scheduleDatailDtos) {
                 response = await fetch(`https://localhost:7199/api/ClassReserved/${item.classScheduleId}`);
@@ -266,9 +269,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>${innerHTML}</tbody>
-                                </table>`;
+                                </table>
+                                    <a href="@Url.Content("~/Coach/CreateCourse")" class="btn btn-primary">新增課程</a>`;
             displayDiv.innerHTML = outerHTML;
-        });
-
+        };
     </script>
 }

@@ -1,0 +1,45 @@
+﻿@{
+    int id = ViewBag.id;
+}
+
+<h3 class="fw-bolder text-center">新增課程</h3>
+<hr />
+<div class="container row">
+    <form>
+        <input type="text" id="coachID" name="coachID" value="@id" hidden />
+        <label class="form-label" for="courseType">課程種類</label>
+        <select class="form-select" id="courseType"></select>
+        <label class="form-label" for="field">場地</label>
+        <select class="form-select" id="field"></select>
+        <label class="form-label" for="date">日期</label>
+        <input type="date" class="form-control" id="date" />
+        <label class="form-label" for="startTime">開始時間</label>
+        <select class="form-select" id="startTime"></select>
+        <label class="form-label" for="endTime">結束時間</label>
+        <select class="form-select" id="endTime"></select>
+        <label class="form-label" for="maxStudent">學生人數上限</label>
+        <input type="number" class="form-control" id="maxStudent" />
+        <div class="mt-3">
+            <button class="btn btn-primary col-3">新增</button>
+            <button class="btn btn-danger col-3">取消</button>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <script>
+        const coachID = document.getElementById('coachID');
+        const courseType = document.getElementById('courseType');
+        (async () => {
+            let response = await fetch(`https://localhost:7199/api/Coach/${coachID.value}`);
+            let data = await response.json();
+            console.log(data.coachDetailDto.experties);
+            let options = data.coachDetailDto.experties.map(x => `<option value="${x.classID}">${x.className}</option>`);
+            courseType.innerHTML = options.join("");
+        })();
+    </script>
+}
+@section Styles {
+    <style>
+
+    </style>
+}

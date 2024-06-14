@@ -79,7 +79,7 @@
         const formCoursePrice = document.getElementById('formCoursePrice');
         const formProductCount = document.getElementById('formProductCount');
         const formProductPrice = document.getElementById('formProductPrice');
-
+        const btnCheckOut = document.getElementById('btnCheckOut');
 
         const memberId = document.getElementById('memberId').value;
         let sum = 0;
@@ -126,6 +126,10 @@
             const productAmount = document.querySelectorAll('.productAmount');
             productAmount.forEach(input => {
                 input.addEventListener('input', function () {
+                    if (parseInt(input.value) > 10)
+                        input.value = 10;
+                    else if (parseInt(input.value) < 1 || input.value == "")
+                        input.value = 1;
                     const checkbox = this.closest('tr').querySelector('.product-checkbox');
                     checkbox.value = parseInt(this.dataset.unitPrice) * parseInt(this.value);
                     loadSum();
@@ -195,6 +199,11 @@
                 sum += parseInt(input.value);
             })
             sumDiv.innerHTML = `總金額:NT${sum}`;
+            if (sum <= 0) {
+                btnCheckOut.disabled = true;
+                return;
+            }
+            btnCheckOut.disabled = false;
             formSum.value = sum;
         };
 
@@ -228,8 +237,8 @@
             //紀錄產品總金額
             formProductPrice.value = sumProduct;
             //計算課程與產品總金額
-            sum = sumCourse + sumProduct;
-            
+            sum = sumCourse + sumProduct;         
+
             this.submit();
         });
         function goBack() {

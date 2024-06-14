@@ -12,5 +12,10 @@ namespace projFitConnect.Controllers
         {
             return View();
         }
+        public IActionResult CreateCourse()
+        {
+            ViewBag.id = 6;
+            return View();
+        }
     }
 }
