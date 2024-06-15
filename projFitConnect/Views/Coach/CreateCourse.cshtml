@@ -7,39 +7,161 @@
 <div class="container row">
     <form>
         <input type="text" id="coachID" name="coachID" value="@id" hidden />
-        <label class="form-label" for="courseType">課程種類</label>
-        <select class="form-select" id="courseType"></select>
-        <label class="form-label" for="field">場地</label>
-        <select class="form-select" id="field"></select>
-        <label class="form-label" for="date">日期</label>
+        <label class="form-label mt-3" for="courseType">課程種類</label>
+        <select class="form-select" id="courseType"><option selected disabled>--請選擇課程--</option></select>
+        <label class="form-label mt-3" for="city">場地</label>
+        <div class="d-flex flex-row w-100">
+            <div class="custom-select" id="gym">
+                <div class="select-selected form-select" id="selectedGym">
+                    <div>--請選擇場館--</div>
+                </div>
+                <div class="select-items select-hide overflow-y-scroll" style="height:500px" id="gymOptions">
+                    <!--放入場館選項-->
+                </div>
+            </div>
+            <div class="custom-select" id="field">
+                <div class="select-selected form-select" id="selectedField">
+                    <div>--請選擇場地--</div>
+                </div>
+                <div class="select-items select-hide overflow-y-scroll" style="height:500px" id="fieldOptions">
+                    <!--放入場地選項-->  
+                </div>
+            </div>
+        </div>
+
+        <label class="form-label mt-3" for="date">日期</label>
         <input type="date" class="form-control" id="date" />
-        <label class="form-label" for="startTime">開始時間</label>
+        <label class="form-label mt-3" for="startTime">開始時間</label>
         <select class="form-select" id="startTime"></select>
-        <label class="form-label" for="endTime">結束時間</label>
+        <label class="form-label mt-3" for="endTime">結束時間</label>
         <select class="form-select" id="endTime"></select>
-        <label class="form-label" for="maxStudent">學生人數上限</label>
+        <label class="form-label mt-3" for="maxStudent">學生人數上限</label>
         <input type="number" class="form-control" id="maxStudent" />
         <div class="mt-3">
             <button class="btn btn-primary col-3">新增</button>
             <button class="btn btn-danger col-3">取消</button>
         </div>
+        
     </form>
+    
 </div>
 @section Scripts {
     <script>
         const coachID = document.getElementById('coachID');
         const courseType = document.getElementById('courseType');
+        const date = document.getElementById('date');
+        const gymOptions = document.getElementById('gymOptions');
+        const fieldOptions = document.getElementById('fieldOptions');
+
+        let today = new Date();
+        today.setDate(today.getDate() + 1);
+        let tomorrow = today.toISOString().split('T')[0];
+        date.setAttribute('min', tomorrow);
+
         (async () => {
-            let response = await fetch(`https://localhost:7199/api/Coach/${coachID.value}`);
-            let data = await response.json();
-            console.log(data.coachDetailDto.experties);
-            let options = data.coachDetailDto.experties.map(x => `<option value="${x.classID}">${x.className}</option>`);
-            courseType.innerHTML = options.join("");
+            //取得教練專長
+            const responseCoach = await fetch(`https://localhost:7199/api/Coach/${coachID.value}`);
+            const dataCoach = await responseCoach.json();
+            let options = dataCoach.coachDetailDto.experties.map(x => `<option value="${x.classID}">${x.className}</option>`);
+            courseType.innerHTML += options.join("");
+
+            //取得全部場館
+            const responseGym = await fetch('https://localhost:7199/api/GymAddress/GetGym');
+            const dataGym = await responseGym.json();
+            let stringHTML = "";
+            dataGym.forEach(item => {
+                stringHTML += `<div class="d-flex flex-column" data-value="${item.gymId}">
+                                    ${item.gymName}
+                                    <div>
+                                        <i class="bi bi-geo-alt-fill"></i>${item.gymAddress}
+                                    </div>
+                              </div>`;
+            });
+            gymOptions.innerHTML = stringHTML;
         })();
+        //選擇場館後，列出場地選項
+        gymOptions.addEventListener('click', async(event) => {
+            let gymId = event.target.closest('div.d-flex').getAttribute('data-value');
+            const responseField = await fetch(`https://localhost:7199/api/GymAddress/GetField/${gymId}`);
+            const dataField = await responseField.json();
+            console.log(dataField);
+            let stringHTML = "";
+            dataField.forEach(item => {
+                stringHTML += `<div class="d-flex flex-column" data-value="${item.fieldId}">
+                                    ${item.fieldName}
+                                    <div>
+                                        ${item.floor} | ${item.fieldPayment}
+                                    </div>
+                                </div>`;
+            });
+            fieldOptions.innerHTML = stringHTML;
+            console.log('end');
+        });
+        //自訂下拉式選單
+        document.addEventListener("DOMContentLoaded", function () {
+            var select = document.querySelector(".custom-select");
+            var selected = select.querySelector(".select-selected");
+            var items = select.querySelector(".select-items");
+
+            selected.addEventListener("click", function () {
+                items.classList.toggle("select-hide");
+            });
+
+            items.addEventListener("click", function (event) {
+                var target = event.target.closest("div.d-flex");
+                if (target) {
+                    selected.innerHTML = target.closest("div").firstChild.textContent;
+                    items.classList.add("select-hide");
+                }
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!select.contains(event.target)) {
+                    items.classList.add("select-hide");
+                }
+            });
+        });
     </script>
 }
 @section Styles {
     <style>
+        .custom-select {
+            position: relative;
+            display: inline-block;
+            font-size: 1rem;
+            line-height: 1.5;
+            width:100%;
+        }
 
+        .select-selected {
+            width: inherit;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            padding: 6px 36px 6px 12px;
+        }
+
+        .select-items {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #2c3e50;
+            width: inherit;
+            display: block;
+            z-index: 99;
+        }
+
+            .select-items div {
+                width:inherit;
+                padding: 10px;
+                cursor: pointer;
+            }
+
+                .select-items div:hover {
+                    color: white;
+                    background-color: #2c3e50;
+                }
+
+        .select-hide {
+            display: none;
+        }
     </style>
 }
