@@ -10,6 +10,11 @@ namespace projFitConnect.Controllers
             ViewBag.memberId = id;
             return View();
         }
+        public IActionResult CourseShoppingCart(int id)
+        {
+            ViewBag.memberId = id;
+            return View();
+        }
         [HttpPost]
         public IActionResult Pay(PayVM payVM)
         {
