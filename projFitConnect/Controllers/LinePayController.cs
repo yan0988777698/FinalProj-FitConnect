@@ -20,6 +20,11 @@ namespace projFitConnect.Controllers
         {
             return View(payVM);
         }
+        [HttpPost]
+        public IActionResult PayforCourse([FromForm] PayforCourseVM payforCourseVM)
+        {
+            return View(payforCourseVM);
+        }
         public IActionResult Confirm()
         {
             return View();
