@@ -1,7 +1,4 @@
-﻿@{
-    ViewData["Title"] = "Profile";
-}
-<div class="border">
+﻿<div class="border">
     <div class="container d-flex">
         <div class="w-25 border position-relative d-flex justify-content-center" style="height: 200px">
             <img src="~/images/model.jpg" class="position-absolute h-100" id="headshot" />
@@ -55,7 +52,7 @@
                     <a class="nav-link dropdown-toggle text-primary" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">教練專區</a>
                     <div class="dropdown-menu w-100" data-popper-placement="bottom-start" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 42px);">
                         <a class="dropdown-item" href="#" id="openedCourse">開課</a>
-                        <a class="dropdown-item" href="#">場地</a>
+                        <a class="dropdown-item" href="#" id="field">場地</a>
                         <a class="dropdown-item" href="#">薪資</a>
                     </div>
                 </li>
@@ -106,6 +103,7 @@
         const openedCourse = document.getElementById('openedCourse');
         const myOrder = document.getElementById('myOrder');
         const myCourse = document.getElementById('myCourse');
+        const field = document.getElementById('field');
         const memberID = 2;
         const coachID = 6;
         
@@ -232,10 +230,10 @@
             const deleteUrl = '@Url.Content("~/Schdule/Delete/")';
             let response = await fetch("https://localhost:7199/api/Coach/6");
             let data = await response.json();
-            let paid = data.scheduleDatailDtos.filter(x => x.coachPayment);
-            let unpaid = data.scheduleDatailDtos.filter(x => !x.coachPayment);
+            let openedCourse = Array.from(data.scheduleDatailDtos).filter(x => x.classStatus == '正常開課');
+            let reviewCourse = Array.from(data.scheduleDatailDtos).filter(x => x.classStatus == '審核中');
             let innerHTML = "";
-            for (const item of paid) {
+            for (const item of openedCourse) {
                 response = await fetch(`https://localhost:7199/api/ClassReserved/${item.classScheduleId}`);
                 data = await response.json();
                 innerHTML += `<tr>
@@ -255,6 +253,22 @@
                                         </div>
                                     </td>
                                 </tr>`
+            }; 
+            for (const item of reviewCourse) {
+                innerHTML += `<tr>
+                                    <td class="align-content-center">${item.class}</td>
+                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
+                                    <td class="align-content-center">${item.courseDate}</td>
+                                    <td class="align-content-center">${item.field}</td>
+                                    <td class="align-content-center">${data.currentNumberOfStudent}/${item.maxStudent}</td>
+                                    <td class="align-content-center">
+                                        <div class="w-75" >
+                                                <button class="btn btn-light mx-2" disabled>
+                                                <i class="bi bi-hourglass-split"></i>審核中
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>`
             };
             const OpenedCourseHtml = `<h3 class="fw-bolder">已開課程</h3>
                                 <table class="table table-hover">
@@ -264,49 +278,75 @@
                                             <th scope="col">時間</th>
                                             <th scope="col">日期</th>
                                             <th scope="col">教室</th>
-                                            <th scope="col">人數上限</th>
+                                            <th scope="col">報名人數</th>
                                             <th scope="col">操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>${innerHTML}</tbody>
                                 </table>
                                     <a href="@Url.Content("~/Coach/CreateCourse")" class="btn btn-primary">新增課程</a>`;
-            innerHTML = "";
-            for (const item of unpaid) {
+            
+            displayDiv.innerHTML = OpenedCourseHtml;
+        };
+
+        field.addEventListener('click', async() => {
+            let response = await fetch("https://localhost:7199/api/Coach/6");
+            let data = await response.json();
+            let paid = data.fieldDetailDtos.filter(x => x.paymentStatus);
+            let unpaid = data.fieldDetailDtos.filter(x => !x.paymentStatus);
+            let innerHTML = "";
+            console.log(paid);
+            for (const item of paid) {
                 innerHTML += `<tr>
-                                    <td class="align-content-center">${item.class}</td>
+                                    <td class="align-content-center">${item.field}</td>
+                                    <td class="align-content-center">NT${item.fieldPayment}</td>
                                     <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
                                     <td class="align-content-center">${item.courseDate}</td>
-                                    <td class="align-content-center">${item.field}</td>
-                                    <td class="align-content-center">${item.classPayment} / 小時</td>
-                                    <td class="align-content-center">
-                                        <div class="w-75" >
-                                            <a class="btn btn-primary mx-2" href="${updateUrl}${item.classScheduleId}">
-                                                <i class="bi bi-pencil-square"></i>編輯
-                                            </a>
-                                            <a class="btn btn-danger mx-2" href="${deleteUrl}${item.classScheduleId}">
-                                                <i class="bi bi-trash3"></i>刪除
-                                            </a>
-                                        </div>
-                                    </td>
+                                    <td class="align-content-center">${item.city} ${item.region} ${item.gym} ${item.floor}</td>
+                                    <td class="align-content-center"><button type="button" class="btn btn-success">已付款</button></td>
                                 </tr>`
             };
-            const UnpaidCourseHtml = `<h3 class="fw-bolder mt-3">待付款課程</h3>
+            const PaidFieldHtml = `<h3 class="fw-bolder">已成功付款</h3>
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th scope="col">課程名稱</th>
+                                                <th scope="col">場地名稱</th>
+                                                <th scope="col">費用/小時</th>
                                                 <th scope="col">時間</th>
                                                 <th scope="col">日期</th>
-                                                <th scope="col">教室</th>
-                                                <th scope="col">場地費</th>
-                                                <th scope="col">操作</th>
+                                                <th scope="col">場館</th>
+                                                <th scope="col">付款狀態</th>
                                             </tr>
                                         </thead>
                                         <tbody>${innerHTML}</tbody>
-                                        </table>
-                                                <a href='@Url.Content("~/LinePay/CourseShoppingCart/")${memberID}' class="btn btn-primary">課程付款</a>`;
-            displayDiv.innerHTML = OpenedCourseHtml + UnpaidCourseHtml;
-        };
+                                    </table>`;
+            innerHTML = "";
+            for (const item of unpaid) {
+                innerHTML += `<tr>
+                                    <td class="align-content-center">${item.field}</td>
+                                    <td class="align-content-center">NT${item.fieldPayment}</td>
+                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
+                                    <td class="align-content-center">${item.courseDate}</td>
+                                    <td class="align-content-center">${item.city} ${item.region} ${item.gym} ${item.floor}</td>
+                                    <td class="align-content-center"><button type="button" class="btn btn-secondary">待付款</button></td>
+                                </tr>`
+            };
+            const UnPaidFieldHtml = `<h3 class="fw-bolder">待付款場地</h3>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">場地名稱</th>
+                                                <th scope="col">費用/小時</th>
+                                                <th scope="col">時間</th>
+                                                <th scope="col">日期</th>
+                                                <th scope="col">場館</th>
+                                                <th scope="col">付款狀態</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>${innerHTML}</tbody>
+                                    </table>
+                                    <a href='@Url.Content("~/LinePay/CourseShoppingCart/")${coachID}' class="btn btn-primary">付款去</a>`;
+            displayDiv.innerHTML = PaidFieldHtml + UnPaidFieldHtml;
+        });
     </script>
 }

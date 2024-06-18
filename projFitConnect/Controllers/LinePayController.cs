@@ -12,7 +12,7 @@ namespace projFitConnect.Controllers
         }
         public IActionResult CourseShoppingCart(int id)
         {
-            ViewBag.memberId = id;
+            ViewBag.coachId = id;
             return View();
         }
         [HttpPost]
