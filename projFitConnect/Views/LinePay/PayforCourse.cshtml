@@ -202,13 +202,6 @@
             let [hours] = timeStr.split(':').map(Number);
             return hours;
         };
-        //格式化數字
-        function formatNumberWithSpace(number) {
-            console.log('ing');
-            return number.toString().padStart(2, ' ');
-        };
-
-        
 
         // 交易訂單資料
         const payment = {
@@ -249,6 +242,7 @@
                     throw new Error('Network response was not ok ' + response.statusText);
                 }
                 const res = await response.json();
+                sessionStorage.setItem('paymentInfo', JSON.stringify(fieldList));
                 window.location = res.info.paymentUrl.web;
             } catch (err) {
                 console.error('Error:', err);

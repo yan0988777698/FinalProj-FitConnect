@@ -26,6 +26,8 @@
 
             transactionId = params.transactionId;
             orderId = params.orderId;
+            const paymentInfo = JSON.parse(sessionStorage.getItem('paymentInfo'));
+            console.log(paymentInfo);
         }
 
         function confirmPayment() {
