@@ -2,7 +2,8 @@
 {
     public class PayforCourseVM
     {
-        public string coursePayList { get; set; }
-        public int courseSum { get; set; }
+        public int coachId { get; set; }
+        public string fieldList { get; set; }
+        public int payment { get; set; }
     }
 }

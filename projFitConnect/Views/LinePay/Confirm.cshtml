@@ -1,41 +1,16 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Confirm";
 }
 
 <h1>付款完成</h1>
-<div class="text-center p-0"><i class="bi bi-check2-circle" style="color:lightgreen;font-size:20em"></i></div>
+<div class="text-center p-0 m-0"><i class="bi bi-check2-circle" style="color:lightgreen;font-size:20em"></i></div>
 <!-- 最上方的 bar -->
-<center>
-    <table>
-        <thead>
-            <tr>
-                <th colspan="2"> 測試商品 </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td colspan="2"></td>
-            </tr>
-            <tr>
-                <td colspan="2"> 價格 : 1999 </td>
-            </tr>
-            <tr>
-                <td colspan="2"> 購買數量 : 2 </td>
-            </tr>
-            <tr>
-                <td colspan="2" style="text-align: right;"> 總金額 : 3998 </td>
-            </tr>
-            <tr>
-                <td align="center" colspan="2"><button onclick="confirmPayment()"> 確認付款</button></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="Container">
-        <a id="paymentStatus">交易狀態 : 交易已授權，等待確認</a>
+<div class="container d-flex flex-column justify-content-start" style="height:200px">
+    <div class="container text-center">
+        <a id="paymentStatus"><h3>交易狀態 : 交易已授權，等待確認</h3></a>
     </div>
-</center>
+    <button class="btn btn-primary btn-lg" onclick="confirmPayment()"> 確認付款</button>
+</div>
 
 @section Scripts {
     <script>
@@ -65,7 +40,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(payment),
                 success: (res) => {
-                    $("#paymentStatus").text("交易狀態 : 成功")
+                    $("#paymentStatus").html("<h3>交易狀態 : 成功</h3>")
                     console.log(res);
 
                     setTimeout(() => {
@@ -81,6 +56,6 @@
 }
 @section Styles {
     <style>
-        
+
     </style>
 }
