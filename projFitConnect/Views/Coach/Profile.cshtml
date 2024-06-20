@@ -256,7 +256,7 @@
         openedCourse.addEventListener('click', async (event) => {
             findCourse();
         });
-
+        //開課
         async function findCourse(){
             const updateUrl = '@Url.Content("~/Schdule/Update/")';
             const deleteUrl = '@Url.Content("~/Schdule/Delete/")';
@@ -266,6 +266,7 @@
             let reviewCourse = Array.from(data.scheduleDatailDtos).filter(x => x.classStatus == '審核中');
             let innerHTML = "";
             let count = 0;
+            //成功開課
             for (const item of openedCourse) {
                 response = await fetch(`https://localhost:7199/api/ClassReserved/${item.classScheduleId}`);
                 data = await response.json();
@@ -289,6 +290,7 @@
                                     </td>
                                 </tr>`
             };
+            //課程審核中
             for (const item of reviewCourse) {
                 count++;
                 innerHTML += `<tr>
@@ -337,6 +339,7 @@
             let innerHTML = "";
             let count = 0;
             console.log(paid);
+            //已付款場地
             for (const item of paid) {
                 count++;
                 innerHTML += `<tr>
@@ -366,6 +369,7 @@
                                     </table>`;
             innerHTML = "";
             count = 0;
+            //待付款場地
             for (const item of unpaid) {
                 count++;
                 innerHTML += `<tr>
