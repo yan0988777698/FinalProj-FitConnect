@@ -280,12 +280,8 @@
                                     <td class="align-content-center">${data.currentNumberOfStudent}/${item.maxStudent}</td>
                                     <td class="align-content-center">
                                         <div class="w-75" >
-                                            <a class="btn btn-primary mx-2" href="${updateUrl}${item.classScheduleId}">
-                                                <i class="bi bi-pencil-square"></i>編輯
-                                            </a>
-                                            <a class="btn btn-danger mx-2" href="${deleteUrl}${item.classScheduleId}">
-                                                <i class="bi bi-trash3"></i>刪除
-                                            </a>
+                                            <button class="btn btn-success mx-2">
+                                            <i class="bi bi-check2"></i>招生中
                                         </div>
                                     </td>
                                 </tr>`
@@ -369,6 +365,7 @@
                                     </table>`;
             innerHTML = "";
             count = 0;
+            const updateUrl = '@Url.Content("~/Field/UpdateField/")';
             //待付款場地
             for (const item of unpaid) {
                 count++;
@@ -381,7 +378,12 @@
                                     <td class="align-content-center">${item.city}${item.region}${item.gym}${item.floor}</td>
                                     <td class="align-content-center">
                                         <button type="button" class="btn btn-secondary">待付款</button>
-                                        <button type="button" class="btn btn-danger deleteUnPaidField" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-id="${item.fieldReserveId}" ><i class="bi bi-x"></i></button>
+                                    </td>
+                                    <td class="align-content-center">
+                                        <a class="btn btn-primary mx-2" href="${updateUrl}${item.fieldReserveId}">
+                                                <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger deleteUnPaidField" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-id="${item.fieldReserveId}"><i class="bi bi-trash"></i></button>
                                     </td>
                                 </tr>`
             };
@@ -397,6 +399,7 @@
                                                 <th scope="col">日期</th>
                                                 <th scope="col">場館</th>
                                                 <th scope="col">付款狀態</th>
+                                                <th scope="col">操作</th>
                                             </tr>
                                         </thead>
                                         <tbody>${innerHTML}</tbody>
@@ -415,6 +418,7 @@
             const deleteUnPaidFields = document.querySelectorAll(".deleteUnPaidField");
             const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
             console.log(deleteUnPaidFields);
+
             deleteUnPaidFields.forEach(item => {
                 item.addEventListener('click', async function () {
                     let id = this.getAttribute("data-id");
