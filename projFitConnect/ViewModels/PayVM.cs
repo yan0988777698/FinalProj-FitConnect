@@ -2,6 +2,8 @@
 {
     public class PayVM
     {
+        public string courseList {  get; set; }
+        public string productList { get; set; }
         public int courseCount { get; set; }
         public int coursePrice { get; set; }
         public int productCount { get; set; }

@@ -18,6 +18,7 @@ namespace projFitConnect.Controllers
         [HttpPost]
         public IActionResult Pay(PayVM payVM)
         {
+            //TODO: 商品結帳未寫
             return View(payVM);
         }
         [HttpPost]

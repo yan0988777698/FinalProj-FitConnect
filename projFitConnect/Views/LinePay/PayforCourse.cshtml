@@ -242,7 +242,7 @@
                     throw new Error('Network response was not ok ' + response.statusText);
                 }
                 const res = await response.json();
-                sessionStorage.setItem('paymentInfo', JSON.stringify(fieldList));
+                sessionStorage.setItem('fieldListInfo', JSON.stringify(fieldList));
                 window.location = res.info.paymentUrl.web;
             } catch (err) {
                 console.error('Error:', err);
