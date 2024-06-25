@@ -40,15 +40,15 @@
                     <i class="bi bi-calendar-event" style="font-size: 2rem; color: #30505C"></i>
                     <div class="d-flex flex-column align-items-center">
                         <span class="fw-bold" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="您目前已完成的課程總時數">累計課程</span>
-                        <span class="fw-bold">--</span>
+                        <span class="fw-bold" id="totalCourseNumber">--</span>
                     </div>
                 </div>
 
                 <div class="w-25 d-flex align-items-center justify-content-evenly">
                     <i class="bi bi-chat-dots" style="font-size: 2rem; color: #30505C"></i>
                     <div class="d-flex flex-column align-items-center">
-                        <span class="fw-bold">評論總數</span>
-                        <span class="fw-bold">--</span>
+                        <span class="fw-bold" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="會員對您的上課滿意度">評論總數</span>
+                        <span class="fw-bold" id="showComment"></span>
                     </div>
                 </div>
 
@@ -93,7 +93,7 @@
     <div class="form-control mt-3" style="height:1000px" id="displayDiv">
         <!--內容呈現於此-->
     </div>
-        
+    
 </div>
 
 @section Styles {
@@ -117,7 +117,12 @@
         .disabled {
             pointer-events: none;
             opacity: 0.5;
-            cursor: default;
+            cursor: not-allowed;
+        }
+
+
+        .picNoReservation{
+            width:50%;
         }
     </style>
 }
@@ -132,6 +137,8 @@
         const myOrder = document.getElementById('myOrder');
         const myCourse = document.getElementById('myCourse');
         const field = document.getElementById('field');
+        const showComment = document.getElementById('showComment');
+        const totalCourseNumber = document.getElementById('totalCourseNumber');
         const memberID = 2;
         const coachID = 6;
 
@@ -140,9 +147,9 @@
         document.addEventListener('DOMContentLoaded', async () => {
             let response = await fetch(`https://localhost:7199/api/Coach/${coachID}`);
             let data = await response.json();
-            console.log(data);
             name.innerHTML = data.coachDetailDto.name;
             intro.innerHTML = data.coachDetailDto.intro;
+            loadComment(data.rateDetailDtos);
 
             response = await fetch(`https://localhost:7199/api/Member/${memberID}`);
             data = await response.json();
@@ -150,8 +157,26 @@
             let numebrOfOrder = data.reserveDetailDtos.filter(item => !item.paymentStatus).length;
             myCourse.innerHTML = `我的課程(${numberOfPaied})`;
             myOrder.innerHTML = `我的訂單(${numebrOfOrder})`;
+            loadTotalCourse(data.reserveDetailDtos);
             findCourse();
+            
         });
+        //顯示上過的課程數
+        function loadTotalCourse(courses) {
+            console.log(courses);
+            totalCourseNumber.innerHTML = `<i class="bi bi-clock-fill"></i> ${courses.length} 堂`;
+        }
+
+        //顯示評論總數與平均
+        function loadComment(comments) {
+            let count = comments.length;
+            let sum = 0;
+            comments.forEach(item => {
+                sum += parseFloat(item.rateClass);
+            });
+            let avg = sum / count;
+            showComment.innerHTML = `${avg} <i class="bi bi-star-fill"></i> / ${count} <i class="bi bi-person-fill"></i>`;
+        };
 
         //我的課程(已付款課程)
         myCourse.addEventListener('click', async () => {
@@ -285,6 +310,7 @@
                                     <td class="align-content-center">${item.courseDate}</td>
                                     <td class="align-content-center">${item.field}</td>
                                     <td class="align-content-center">${data.currentNumberOfStudent}/${item.maxStudent}</td>
+                                    <td class="align-content-center">NT${item.classPayment}</td>
                                     <td class="align-content-center">
                                         <div class="w-75" >
                                             <button class="btn btn-success mx-2">
@@ -303,6 +329,7 @@
                                     <td class="align-content-center">${item.courseDate}</td>
                                     <td class="align-content-center">${item.field}</td>
                                     <td class="align-content-center">${data.currentNumberOfStudent}/${item.maxStudent}</td>
+                                    <td class="align-content-center">NT${item.classPayment}</td>
                                     <td class="align-content-center">
                                         <div class="w-75" >
                                                 <button class="btn btn-light mx-2" disabled>
@@ -322,6 +349,7 @@
                                             <th scope="col">日期</th>
                                             <th scope="col">教室</th>
                                             <th scope="col">報名人數</th>
+                                            <th scope="col">課程費用/每位</th>
                                             <th scope="col">狀態</th>
                                         </tr>
                                     </thead>
@@ -333,10 +361,10 @@
         };
         //顯示場地
         field.addEventListener('click', showField);
-        
         async function showField() {
             let response = await fetch("https://localhost:7199/api/Coach/6");
             let data = await response.json();
+            console.log(data);
             let paid = data.fieldDetailDtos.filter(x => x.paymentStatus);
             let unpaid = data.fieldDetailDtos.filter(x => !x.paymentStatus);
             let innerHTML = "";
@@ -361,7 +389,7 @@
                                             <tr class="table-primary">
                                                 <th scope="col">編號</th>
                                                 <th scope="col">場地名稱</th>
-                                                <th scope="col">費用/小時</th>
+                                                <th scope="col">場地費用/小時</th>
                                                 <th scope="col">時間</th>
                                                 <th scope="col">日期</th>
                                                 <th scope="col">場館</th>
@@ -394,14 +422,14 @@
                                     </td>
                                 </tr>`
             };
-
+            
             const UnPaidFieldHtml = `<h3 class="fw-bolder">待付款場地</h3>
                                     <table class="table table-hover">
                                         <thead>
                                             <tr class="table-primary">
                                                 <th scope="col">編號</th>
                                                 <th scope="col">場地名稱</th>
-                                                <th scope="col">費用/小時</th>
+                                                <th scope="col">場地費用/小時</th>
                                                 <th scope="col">時間</th>
                                                 <th scope="col">日期</th>
                                                 <th scope="col">場館</th>
@@ -413,6 +441,9 @@
                                     </table>
                                     <a href='@Url.Content("~/LinePay/CourseShoppingCart/")${coachID}' class="btn btn-primary" id="btnPay">付款去</a>`;
             displayDiv.innerHTML = PaidFieldHtml + UnPaidFieldHtml;
+            if (unpaid.length == 0) {
+                displayDiv.innerHTML += `<div><img src='@Url.Content("~/images/noreservation.png")' class="picNoReservation"/></div>`;
+            }
             const btnPay = document.getElementById('btnPay');
             //如果沒有未付款場地，就禁用結帳按鈕
             btnPay.classList.remove('disabled');
@@ -421,6 +452,8 @@
             }
             deleteUnPaidField();
         };
+
+        //刪除
         function deleteUnPaidField() {
             const deleteUnPaidFields = document.querySelectorAll(".deleteUnPaidField");
             const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
@@ -448,5 +481,9 @@
                 })
             });
         }
+
+        //啟用ToolTip
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
 }

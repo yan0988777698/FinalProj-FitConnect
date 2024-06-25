@@ -6,7 +6,7 @@
 }
 <form asp-controller="Schdule" asp-action="Update" method="post" class="container ">
     <div class="p-3">
-        <input type="text" id="id" value="@ViewBag.id" hidden />
+        <input type="text" id="id" value="@ViewBag.id" name="fieldReservedId" hidden />
         <label class="form-label" for="class">課程名稱</label>
         <input type="text" class="form-control" id="class" name="class" />
         <label class="form-label" for="courseTime">時間</label>
