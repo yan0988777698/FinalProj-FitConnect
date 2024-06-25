@@ -16,81 +16,84 @@
     </div>
 </div>
 <!-- Delete Confirmation Modal --> 
-<div class="container">
-    <div class="bg container d-flex rounded-top">
-        <div class="w-25 position-relative d-flex justify-content-center" style="height: 200px">
-            <img src="~/images/model.jpg" class="position-absolute h-100" id="headshot" />
-            <img src="~/images/mask.png" class="position-absolute h-100" />
-            <form><input type="file" id="photo" class="d-none" /></form>
-            <label for="photo" class="btn btn-outline-light position-absolute w-100 bottom-0" style="border:none"><i class="bi bi-camera text-primary"></i></label>
-        </div>
-        <div class="w-75">
-            <div class="bg d-flex align-items-center form-control h-25 fs-4 fw-bold" id="name"></div>
-            <div class="bg form-control h-50" id="intro"></div>
-            <div class="bg form-control h-25 d-flex">
-                <div class="w-25 d-flex align-items-center justify-content-evenly">
-                    <i class="bi bi-person-circle" style="font-size: 2rem; color: #30505C"></i>
-                    <div class="d-flex flex-column align-items-center">
-                        <span class="fw-bold">加入時間</span>
-                        <span class="fw-bold">2024-06-05</span>
+<div class="w-100">
+    <div class="w-100 bg">
+        <div class="bg container d-flex rounded-top">
+            <div class="w-25 position-relative d-flex justify-content-center" style="height: 200px">
+                <img src="~/images/model.jpg" class="position-absolute h-100" id="headshot" />
+                <img src="~/images/mask.png" class="position-absolute h-100" />
+                <form><input type="file" id="photo" class="d-none" /></form>
+                <label for="photo" class="btn btn-outline-light position-absolute w-100 bottom-0" style="border:none"><i class="bi bi-camera text-primary"></i></label>
+            </div>
+            <div class="w-75">
+                <div class="bg d-flex align-items-center form-control h-25 fs-4 fw-bold" id="name"></div>
+                <div class="bg form-control h-50" id="intro"></div>
+                <div class="bg form-control h-25 d-flex">
+                    <div class="w-25 d-flex align-items-center justify-content-evenly">
+                        <i class="bi bi-person-circle" style="font-size: 2rem; color: #30505C"></i>
+                        <div class="d-flex flex-column align-items-center">
+                            <span class="fw-bold">加入時間</span>
+                            <span class="fw-bold">2024-06-05</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="w-25 d-flex align-items-center justify-content-evenly">
-                    <i class="bi bi-calendar-event" style="font-size: 2rem; color: #30505C"></i>
-                    <div class="d-flex flex-column align-items-center">
-                        <span class="fw-bold" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="您目前已完成的課程總時數">累計課程</span>
-                        <span class="fw-bold" id="totalCourseNumber">--</span>
+                    <div class="w-25 d-flex align-items-center justify-content-evenly">
+                        <i class="bi bi-calendar-event" style="font-size: 2rem; color: #30505C"></i>
+                        <div class="d-flex flex-column align-items-center">
+                            <span class="fw-bold" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="您目前已完成的課程總時數">累計課程</span>
+                            <span class="fw-bold" id="totalCourseNumber">--</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="w-25 d-flex align-items-center justify-content-evenly">
-                    <i class="bi bi-chat-dots" style="font-size: 2rem; color: #30505C"></i>
-                    <div class="d-flex flex-column align-items-center">
-                        <span class="fw-bold" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="會員對您的上課滿意度">評論總數</span>
-                        <span class="fw-bold" id="showComment"></span>
+                    <div class="w-25 d-flex align-items-center justify-content-evenly">
+                        <i class="bi bi-chat-dots" style="font-size: 2rem; color: #30505C"></i>
+                        <div class="d-flex flex-column align-items-center">
+                            <span class="fw-bold" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="會員對您的上課滿意度">評論總數</span>
+                            <span class="fw-bold" id="showComment"></span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="w-25 d-flex align-items-center justify-content-evenly">
-                    <i class="bi bi-balloon-heart-fill" style="font-size: 2rem; color: #30505C"></i>
-                    <div class="d-flex flex-column align-items-center">
-                        <span class="fw-bold"></span>
-                        <span class="fw-bold">--</span>
+                    <div class="w-25 d-flex align-items-center justify-content-evenly">
+                        <i class="bi bi-balloon-heart-fill" style="font-size: 2rem; color: #30505C"></i>
+                        <div class="d-flex flex-column align-items-center">
+                            <span class="fw-bold"></span>
+                            <span class="fw-bold">--</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="bg container d-flex" style="height:50px">
+            <div class="flex-fill text-center align-content-center hover-effect">
+                <ul class="nav nav-pills">
+                    <li class="nav-item dropdown flex-fill h-100">
+                        <a class="nav-link dropdown-toggle text-primary" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">教練專區</a>
+                        <div class="dropdown-menu w-100" data-popper-placement="bottom-start" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 42px);">
+                            <a class="dropdown-item" href="#" id="openedCourse">開課</a>
+                            <a class="dropdown-item" href="#" id="field">場地</a>
+                            <a class="dropdown-item" href="#">薪資</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex-fill text-center align-content-center hover-effect">
+                <a class="d-block nav-link h-100 align-content-center" href="#" id="myCourse">我的課程(0)</a>
+            </div>
+            <div class="flex-fill text-center align-content-center hover-effect">
+                <a class="d-block nav-link h-100 align-content-center" href="#" id="myOrder">我的訂單(0)</a>
+            </div>
+            <div class="flex-fill text-center align-content-center hover-effect">
+                <a class="d-block nav-link h-100 align-content-center" href="#">我的收藏</a>
+            </div>
+            <div class="flex-fill text-center align-content-center hover-effect">
+                <a class="d-block nav-link h-100 align-content-center" href="#">我的追蹤</a>
+            </div>
+        </div>
     </div>
     
-    <div class="bg-light d-flex bg" style="height:50px">
-        <div class="flex-fill text-center align-content-center hover-effect">
-            <ul class="nav nav-pills">
-                <li class="nav-item dropdown flex-fill h-100">
-                    <a class="nav-link dropdown-toggle text-primary" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">教練專區</a>
-                    <div class="dropdown-menu w-100" data-popper-placement="bottom-start" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 42px);">
-                        <a class="dropdown-item" href="#" id="openedCourse">開課</a>
-                        <a class="dropdown-item" href="#" id="field">場地</a>
-                        <a class="dropdown-item" href="#">薪資</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="flex-fill text-center align-content-center hover-effect">
-            <a class="d-block nav-link h-100 align-content-center" href="#" id="myCourse">我的課程(0)</a>
-        </div>
-        <div class="flex-fill text-center align-content-center hover-effect">
-            <a class="d-block nav-link h-100 align-content-center" href="#" id="myOrder">我的訂單(0)</a>
-        </div>
-        <div class="flex-fill text-center align-content-center hover-effect">
-            <a class="d-block nav-link h-100 align-content-center" href="#">我的收藏</a>
-        </div>
-        <div class="flex-fill text-center align-content-center hover-effect">
-            <a class="d-block nav-link h-100 align-content-center" href="#">我的追蹤</a>
-        </div>
-    </div>
 
-    <div class="form-control mt-3" style="height:1000px" id="displayDiv">
+    <div class="container form-control mt-3" style="height:1000px" id="displayDiv">
         <!--內容呈現於此-->
     </div>
     

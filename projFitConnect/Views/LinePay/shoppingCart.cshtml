@@ -2,72 +2,72 @@
     var memberId = ViewBag.memberId;
 }
 <input type="hidden" id="memberId" value="@memberId" />
-
-<div class="fw-bolder fs-5"><i class="bi bi-cart4 mx-1"></i><span>購物車</span></div>
-<!-- 課程清單 -->
 <div class="container">
-    <h5 class="mt-5">課程清單</h5>
-    <table class="mx-auto table table-hover mb-1">
-        <thead>
-            <tr class="shadow">
-                <th>
-                    <input class="form-check-input" type="checkbox" value="" id="allChecked_course" checked="" />
-                    <label class="form-check-label" for="allChecked_course">
-                        全選
-                    </label>
-                </th>
-                <th scope="col">課程名稱</th>
-                <th scope="col">教練</th>
-                <th scope="col">售價</th>
-            </tr>
-        </thead>
-        <tbody id="tbody_course"></tbody>
-    </table>
-</div>
-<!-- 商品清單 -->
-<div class="container mb-5">
-    <h5 class="mt-5">商品清單</h5>
-    <table class="mx-auto table table-hover mb-1">
-        <thead>
-            <tr class="shadow">
-                <th>
-                    <input class="form-check-input" type="checkbox" value="" id="allChecked_product" checked="" />
-                    <label class="form-check-label" for="allChecked_product">
-                        全選
-                    </label>
-                </th>
-                <th scope="col">商品名稱</th>
-                <th scope="col">數量</th>
-                <th scope="col">單價</th>
-            </tr>
-        </thead>
-        <tbody id="tbody_product"></tbody>
-    </table>
-</div>
-<hr />
-<!-- 顯示總金額 -->
-<div class="form-label form-control shadow" id="sumDiv"></div>
-
-<div class="row my-5">
-    <div class="col-6 col-md-3">
-        <form asp-action="Pay" method="post" id="checkoutForm">
-            <input type="number" id="formCourseCount" name="courseCount" hidden />
-            <input type="number" id="formCoursePrice" name="coursePrice" hidden />
-            <input type="text" id="formCourseList" name="courseList" hidden />
-
-            <input type="number" id="formProductCount" name="productCount" value="0" hidden />
-            <input type="number" id="formProductPrice" name="productPrice" value="0" hidden />
-            <input type="text" id="formProductList" name="productList" hidden />
-
-            <input type="number" id="formSum" name="sum" hidden />
-            <button type="submit" class="btn btn-success col-6 col-md-3 form-control" id="btnCheckOut">前往結帳</button>
-        </form>
+    <div class="fw-bolder fs-5"><i class="bi bi-cart4 mx-1"></i><span>購物車</span></div>
+    <!-- 課程清單 -->
+    <div class="container">
+        <h5 class="mt-5">課程清單</h5>
+        <table class="mx-auto table table-hover mb-1">
+            <thead>
+                <tr class="shadow">
+                    <th>
+                        <input class="form-check-input" type="checkbox" value="" id="allChecked_course" checked="" />
+                        <label class="form-check-label" for="allChecked_course">
+                            全選
+                        </label>
+                    </th>
+                    <th scope="col">課程名稱</th>
+                    <th scope="col">教練</th>
+                    <th scope="col">售價</th>
+                </tr>
+            </thead>
+            <tbody id="tbody_course"></tbody>
+        </table>
     </div>
-    <div class="col-6 col-md-3">
-        <button class="btn btn-danger col-6 col-md-3 form-control" onclick="goBack()">取消</button>
+    <!-- 商品清單 -->
+    <div class="container mb-5">
+        <h5 class="mt-5">商品清單</h5>
+        <table class="mx-auto table table-hover mb-1">
+            <thead>
+                <tr class="shadow">
+                    <th>
+                        <input class="form-check-input" type="checkbox" value="" id="allChecked_product" checked="" />
+                        <label class="form-check-label" for="allChecked_product">
+                            全選
+                        </label>
+                    </th>
+                    <th scope="col">商品名稱</th>
+                    <th scope="col">數量</th>
+                    <th scope="col">單價</th>
+                </tr>
+            </thead>
+            <tbody id="tbody_product"></tbody>
+        </table>
+    </div>
+    <hr />
+    <!-- 顯示總金額 -->
+    <div class="form-label form-control shadow" id="sumDiv"></div>
+
+    <div class="row my-5">
+        <div class="col-6 col-md-3">
+            <form asp-action="Pay" method="post" id="checkoutForm">
+                <input type="number" id="formCourseCount" name="courseCount" hidden />
+                <input type="number" id="formCoursePrice" name="coursePrice" hidden />
+                <input type="text" id="formCourseList" name="courseList" hidden />
+
+                <input type="number" id="formProductCount" name="productCount" value="0" hidden />
+                <input type="number" id="formProductPrice" name="productPrice" value="0" hidden />
+                <input type="text" id="formProductList" name="productList" hidden />
+
+                <input type="number" id="formSum" name="sum" hidden />
+                <button type="submit" class="btn btn-primary col-6 col-md-3 form-control" id="btnCheckOut">前往結帳</button>
+            </form>
+        </div>
+        <div class="col-6 col-md-3">
+            <button class="btn btn-danger col-6 col-md-3 form-control" onclick="goBack()">取消</button>
+        </div>
     </div>
 </div>
-
 
 @section Scripts {
     <script>
