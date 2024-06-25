@@ -1,4 +1,5 @@
-﻿<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+﻿<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -15,21 +16,20 @@
         </div>
     </div>
 </div>
-<!-- Delete Confirmation Modal --> 
-<div class="container">
-    <div class="bg container d-flex rounded-top">
-        <div class="w-25 position-relative d-flex justify-content-center" style="height: 200px">
+<div class="border">
+    <div class="container d-flex">
+        <div class="w-25 border position-relative d-flex justify-content-center" style="height: 200px">
             <img src="~/images/model.jpg" class="position-absolute h-100" id="headshot" />
             <img src="~/images/mask.png" class="position-absolute h-100" />
             <form><input type="file" id="photo" class="d-none" /></form>
-            <label for="photo" class="btn btn-outline-light position-absolute w-100 bottom-0" style="border:none"><i class="bi bi-camera text-primary"></i></label>
+            <label for="photo" class="btn btn-light position-absolute w-100 bottom-0">更換大頭照</label>
         </div>
         <div class="w-75">
-            <div class="bg d-flex align-items-center form-control h-25 fs-4 fw-bold" id="name"></div>
-            <div class="bg form-control h-50" id="intro"></div>
-            <div class="bg form-control h-25 d-flex">
+            <div class="d-flex align-items-center form-control h-25 fs-4 fw-bold" id="name">FITCONNECT教練</div>
+            <div class="form-control h-50" id="intro">自我介紹</div>
+            <div class="form-control h-25 d-flex">
                 <div class="w-25 d-flex align-items-center justify-content-evenly">
-                    <i class="bi bi-person-circle" style="font-size: 2rem; color: #30505C"></i>
+                    <i class="bi bi-person-circle" style="font-size: 2rem; color: rgb(87, 198, 163);"></i>
                     <div class="d-flex flex-column align-items-center">
                         <span class="fw-bold">加入時間</span>
                         <span class="fw-bold">2024-06-05</span>
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="w-25 d-flex align-items-center justify-content-evenly">
-                    <i class="bi bi-calendar-event" style="font-size: 2rem; color: #30505C"></i>
+                    <i class="bi bi-calendar-event" style="font-size: 2rem; color: rgb(87, 198, 163);"></i>
                     <div class="d-flex flex-column align-items-center">
                         <span class="fw-bold" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="您目前已完成的課程總時數">累計課程</span>
                         <span class="fw-bold">--</span>
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="w-25 d-flex align-items-center justify-content-evenly">
-                    <i class="bi bi-chat-dots" style="font-size: 2rem; color: #30505C"></i>
+                    <i class="bi bi-chat-dots" style="font-size: 2rem; color: rgb(87, 198, 163);"></i>
                     <div class="d-flex flex-column align-items-center">
                         <span class="fw-bold">評論總數</span>
                         <span class="fw-bold">--</span>
@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="w-25 d-flex align-items-center justify-content-evenly">
-                    <i class="bi bi-balloon-heart-fill" style="font-size: 2rem; color: #30505C"></i>
+                    <i class="bi bi-balloon-heart-fill" style="font-size: 2rem; color: rgb(87, 198, 163);"></i>
                     <div class="d-flex flex-column align-items-center">
                         <span class="fw-bold"></span>
                         <span class="fw-bold">--</span>
@@ -62,9 +62,9 @@
             </div>
         </div>
     </div>
-    
-    <div class="bg-light d-flex bg" style="height:50px">
-        <div class="flex-fill text-center align-content-center hover-effect">
+
+    <div class="border bg-light d-flex" style="height:50px">
+        <div class="border flex-fill text-center align-content-center hover-effect">
             <ul class="nav nav-pills">
                 <li class="nav-item dropdown flex-fill h-100">
                     <a class="nav-link dropdown-toggle text-primary" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">教練專區</a>
@@ -76,21 +76,21 @@
                 </li>
             </ul>
         </div>
-        <div class="flex-fill text-center align-content-center hover-effect">
+        <div class="border flex-fill text-center align-content-center hover-effect">
             <a class="d-block nav-link h-100 align-content-center" href="#" id="myCourse">我的課程(0)</a>
         </div>
-        <div class="flex-fill text-center align-content-center hover-effect">
+        <div class="border flex-fill text-center align-content-center hover-effect">
             <a class="d-block nav-link h-100 align-content-center" href="#" id="myOrder">我的訂單(0)</a>
         </div>
-        <div class="flex-fill text-center align-content-center hover-effect">
+        <div class="border flex-fill text-center align-content-center hover-effect">
             <a class="d-block nav-link h-100 align-content-center" href="#">我的收藏</a>
         </div>
-        <div class="flex-fill text-center align-content-center hover-effect">
+        <div class="border flex-fill text-center align-content-center hover-effect">
             <a class="d-block nav-link h-100 align-content-center" href="#">我的追蹤</a>
         </div>
     </div>
 
-    <div class="form-control mt-3" style="height:1000px" id="displayDiv">
+    <div class="border form-control" style="height:1000px" id="displayDiv">
         <!--內容呈現於此-->
     </div>
         
@@ -98,20 +98,15 @@
 
 @section Styles {
     <style>
-        .bg{
-            background-color: #B9CED8;
-        }
-        .form-control{
-            border:none;
-        }
         .hover-effect {
-            background-color: #B9CED8;
-            font-weight:bolder;
+            background-color: rgba(87, 198, 163);
             transition: background-color 0.3s ease;
+            transition: font-size 0.3s ease;
         }
 
             .hover-effect:hover {
-                background-color: #DDE6EC;
+                background-color: rgba(137, 221, 198);
+                font-size: 1.25em;
             }
 
         .disabled {
@@ -178,8 +173,7 @@
                                     </td>
                                 </tr>`
             });
-            const outerHTML = `<h3 class="fw-bolder">我的課程</h3>
-                                <table class="table table-hover">
+            const outerHTML = `<table class="table table-hover">
                                     <thead>
                                           <tr class="table-primary">
                                             <th scope="col">編號</th>
@@ -226,8 +220,7 @@
                                     </td>
                                 </tr>`
             });
-            const outerHTML = `<h3 class="fw-bolder">我的訂單</h3>
-                                <table class="table table-hover">
+            const outerHTML = `<table class="table table-hover">
                                     <thead>
                                          <tr class="table-primary">
                                             <th scope="col">編號</th>
@@ -322,7 +315,7 @@
                                             <th scope="col">日期</th>
                                             <th scope="col">教室</th>
                                             <th scope="col">報名人數</th>
-                                            <th scope="col">狀態</th>
+                                            <th scope="col">操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>${innerHTML}</tbody>
