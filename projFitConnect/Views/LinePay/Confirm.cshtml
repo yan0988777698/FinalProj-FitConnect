@@ -1,15 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Confirm";
 }
-
-<h1>付款完成</h1>
-<div class="text-center p-0 m-0"><i class="bi bi-check2-circle" style="color:lightgreen;font-size:20em"></i></div>
-<!-- 最上方的 bar -->
-<div class="container d-flex flex-column justify-content-start" style="height:200px">
-    <div class="container text-center">
-        <a id="paymentStatus"><h3>交易狀態 : 交易已授權，等待確認</h3></a>
+<div class="container m-auto">
+    <h1>付款完成</h1>
+    <div class="text-center p-0 m-0"><i class="bi bi-check2-circle" style="color:lightgreen;font-size:20em"></i></div>
+    <!-- 最上方的 bar -->
+    <div class="container d-flex flex-column justify-content-start" style="height:200px">
+        <div class="container text-center">
+            <a id="paymentStatus"><h3>交易狀態 : 交易已授權，等待確認</h3></a>
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="confirmPayment()"> 確認付款</button>
     </div>
-    <button class="btn btn-primary btn-lg" onclick="confirmPayment()"> 確認付款</button>
 </div>
 
 @section Scripts {
@@ -97,10 +98,10 @@
                             }, 2000);
                         }
                     }
-                    
-                   
 
-                    
+
+
+
                 },
                 error: (err) => {
                     console.log(err);

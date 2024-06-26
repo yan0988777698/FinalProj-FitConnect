@@ -5,7 +5,7 @@
 
 
 <!-- 課程清單 -->
-<div class="container">
+<div class="container m-auto">
     <div class="fw-bolder fs-5 mb-3"><i class="bi bi-cart4 mx-1"></i><span>預約場地清單</span></div>
     <table class="mx-auto table table-hover mb-1">
         <thead>
@@ -23,26 +23,26 @@
         </thead>
         <tbody id="tbody_field"></tbody>
     </table>
+
+
+    <hr />
+    <div class="form-label form-control shadow" id="sumDiv"></div>
+
+
+    <form id="coursePayForm" action="/LinePay/PayforCourse" method="post">
+        <input type="number" name="coachId" value="@coachId" hidden />
+        <input type="text" name="fieldList" id="fieldList" hidden>
+        <input type="number" name="payment" id="payment" hidden />
+        <div class="row my-5">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-success col-6 col-md-3 form-control" id="btnCheckOut">前往結帳</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <button type="button" class="btn btn-danger col-6 col-md-3 form-control" onclick="goBack()">取消</button>
+            </div>
+        </div>
+    </form>
 </div>
-
-<hr />
-<div class="form-label form-control shadow" id="sumDiv"></div>
-
-
-<form id="coursePayForm" action="/LinePay/PayforCourse" method="post">
-    <input type="number" name="coachId" value="@coachId" hidden />
-    <input type="text" name="fieldList" id="fieldList" hidden>
-    <input type="number" name="payment" id="payment" hidden/>
-    <div class="row my-5">
-        <div class="col-6 col-md-3">
-            <button type="submit" class="btn btn-success col-6 col-md-3 form-control" id="btnCheckOut">前往結帳</button>
-        </div>
-        <div class="col-6 col-md-3">
-            <button type="button" class="btn btn-danger col-6 col-md-3 form-control" onclick="goBack()">取消</button>
-        </div>
-    </div>
-</form>
-
 @section Scripts {
     <script>
         const coachId = document.getElementById('coachId');
@@ -63,13 +63,13 @@
             unpaid.forEach(item => {
                 let timeParse = parseTime(item.courseEndTime) - parseTime(item.courseStartTime)
                 innerHTML += `<tr class="shadow field">
-                                    <td class="align-content-center"><input class="form-check-input check-value" type="checkbox" value="${item.fieldPayment * timeParse}" data-id="${item.fieldReserveId}" checked=""/></td>
-                                    <td class="align-content-center">${item.field}</td>
-                                    <td class="align-content-center">${item.city} ${item.region} ${item.gym} ${item.floor}</td>
-                                    <td class="align-content-center">${item.courseDate}</td>
-                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
-                                    <td class="align-content-center">NT$${item.fieldPayment}</td>
-                                </tr>`
+                                                    <td class="align-content-center"><input class="form-check-input check-value" type="checkbox" value="${item.fieldPayment * timeParse}" data-id="${item.fieldReserveId}" checked=""/></td>
+                                                    <td class="align-content-center">${item.field}</td>
+                                                    <td class="align-content-center">${item.city} ${item.region} ${item.gym} ${item.floor}</td>
+                                                    <td class="align-content-center">${item.courseDate}</td>
+                                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
+                                                    <td class="align-content-center">NT$${item.fieldPayment}</td>
+                                                </tr>`
             });
             tbody_field.innerHTML = innerHTML;
             loadSum();

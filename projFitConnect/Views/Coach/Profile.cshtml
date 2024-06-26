@@ -56,7 +56,7 @@
                     <div class="w-25 d-flex align-items-center justify-content-evenly">
                         <i class="bi bi-balloon-heart-fill" style="font-size: 2rem; color: #30505C"></i>
                         <div class="d-flex flex-column align-items-center">
-                            <span class="fw-bold"></span>
+                            <span class="fw-bold">商品收藏</span>
                             <span class="fw-bold">--</span>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
     </div>
     
 
-    <div class="container form-control mt-3" style="height:1000px" id="displayDiv">
+    <div class="container form-control mt-3" id="displayDiv">
         <!--內容呈現於此-->
     </div>
     
@@ -144,14 +144,14 @@
         const totalCourseNumber = document.getElementById('totalCourseNumber');
         const memberID = 2;
         const coachID = 6;
-
+        let pageParams = { coachId: coachID, keyword: "" };
         
         //頁面載入時執行
         document.addEventListener('DOMContentLoaded', async () => {
             let response = await fetch(`https://localhost:7199/api/Coach/${coachID}`);
             let data = await response.json();
-            name.innerHTML = data.coachDetailDto.name;
-            intro.innerHTML = data.coachDetailDto.intro;
+            name.innerHTML = `<img src='@Url.Content("~/images/coachbadge.gif")' width="32px" class="rounded" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="高級教練"/>${data.coachDetailDto.name}`;
+            intro.innerHTML = `<p class="fw-bolder fs-5">${data.coachDetailDto.intro}</p>`;
             loadComment(data.rateDetailDtos);
 
             response = await fetch(`https://localhost:7199/api/Member/${memberID}`);
@@ -162,7 +162,10 @@
             myOrder.innerHTML = `我的訂單(${numebrOfOrder})`;
             loadTotalCourse(data.reserveDetailDtos);
             findCourse();
-            
+
+            //啟用ToolTip
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
         });
         //顯示上過的課程數
         function loadTotalCourse(courses) {
@@ -295,7 +298,7 @@
         async function findCourse(){
             const updateUrl = '@Url.Content("~/Schdule/Update/")';
             const deleteUrl = '@Url.Content("~/Schdule/Delete/")';
-            let response = await fetch("https://localhost:7199/api/Coach/6");
+            let response = await fetch("https://localhost:7199/api/Coach/Pagination", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pageParams) });
             let data = await response.json();
             let openedCourse = Array.from(data.scheduleDatailDtos).filter(x => x.classStatus == '正常開課');
             let reviewCourse = Array.from(data.scheduleDatailDtos).filter(x => x.classStatus == '審核中');
@@ -342,25 +345,34 @@
                                     </td>
                                 </tr>`
             };
-            const OpenedCourseHtml = `<h3 class="fw-bolder">已開課程</h3>
-                                <table class="table table-hover">
-                                    <thead>
-                                         <tr class="table-primary">
-                                            <th scope="col">編號</th>
-                                            <th scope="col">課程名稱</th>
-                                            <th scope="col">時間</th>
-                                            <th scope="col">日期</th>
-                                            <th scope="col">教室</th>
-                                            <th scope="col">報名人數</th>
-                                            <th scope="col">課程費用/每位</th>
-                                            <th scope="col">狀態</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>${innerHTML}</tbody>
-                                </table>
-                                    <a href="@Url.Content("~/Coach/CreateCourse")" class="btn btn-primary">新增課程</a>`;
-            
+            const OpenedCourseHtml = `<div class="d-flex flex-row mb-3 justify-content-between">
+                                            <h3 class="fw-bolder">已開課程</h3>
+                                            <input class="form-control me-2 border w-25" id="keywordSearch" type="search" placeholder="課程搜尋" aria-label="Search" autocomplete="off">
+                                     </div>
+                                        <table class="table table-hover">
+                                            <thead>
+                                                 <tr class="table-primary">
+                                                    <th scope="col">編號</th>
+                                                    <th scope="col">課程名稱</th>
+                                                    <th scope="col">時間</th>
+                                                    <th scope="col">日期</th>
+                                                    <th scope="col">教室</th>
+                                                    <th scope="col">報名人數</th>
+                                                    <th scope="col">課程費用/每位</th>
+                                                    <th scope="col">狀態</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>${innerHTML}</tbody>
+                                        </table>
+                                            <a href="@Url.Content("~/Coach/CreateCourse")" class="btn btn-primary">新增課程</a>`;
             displayDiv.innerHTML = OpenedCourseHtml;
+            let keywordSearch = document.getElementById('keywordSearch');
+            keywordSearch.addEventListener('keydown', async (event) => {
+                if (event.key === 'Enter') {
+                    pageParams.keyword = event.target.value;
+                    await findCourse();
+                }
+            });
         };
         //顯示場地
         field.addEventListener('click', showField);
@@ -485,8 +497,6 @@
             });
         }
 
-        //啟用ToolTip
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        
     </script>
 }
