@@ -201,6 +201,7 @@
                 }
                 const res = await response.json();
                 sessionStorage.setItem('courseListInfo', JSON.stringify(courseList));
+                sessionStorage.setItem('sum', JSON.stringify(sum));
                 window.location = res.info.paymentUrl.web;
             } catch (err) {
                 console.error('Error:', err);

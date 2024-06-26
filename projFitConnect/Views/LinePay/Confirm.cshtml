@@ -18,7 +18,7 @@
         let baseLoginPayUrl = 'https://localhost:7199/api/LinePay/';
         let transactionId = "";
         let orderId = "";
-
+        let sum = JSON.parse(sessionStorage.getItem('sum'));
         window.onload = () => {
             // 取出 query parameter 中的 transactionId & orderId
             const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -37,7 +37,7 @@
         function confirmPayment() {
             // 交易訂單假資料
             payment = {
-                amount: 3998,
+                amount: sum,
                 currency: "TWD",
             };
             $.post({
@@ -49,6 +49,7 @@
                     if (sessionStorage.getItem('fieldListInfo') != null) {
                         const fieldListInfo = JSON.parse(sessionStorage.getItem('fieldListInfo'));
                         sessionStorage.removeItem('fieldListInfo');
+                        sessionStorage.removeItem('sum');
                         console.log(fieldListInfo);
                         //將教練結帳完成的場地寫入資料庫
                         const fieldResponse = await fetch('https://localhost:7199/api/Schedule',
