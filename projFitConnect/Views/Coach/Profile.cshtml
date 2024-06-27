@@ -15,8 +15,11 @@
         </div>
     </div>
 </div>
-<!-- Delete Confirmation Modal --> 
-<div class="w-100">
+<!-- Delete Confirmation Modal -->
+<div class="d-flex justify-content-center">
+    <div class="spinner-grow" role="status" id="spinner"><span class="visually-hidden">Loading...</span></div>
+</div>
+<div class="w-100" id="content" style="display:none">
     <div class="w-100 bg">
         <div class="bg container d-flex rounded-top">
             <div class="w-25 position-relative d-flex justify-content-center" style="height: 200px">
@@ -91,25 +94,27 @@
             </div>
         </div>
     </div>
-    
+
 
     <div class="container form-control mt-3" id="displayDiv">
         <!--內容呈現於此-->
     </div>
-    
+
 </div>
 
 @section Styles {
     <style>
-        .bg{
+        .bg {
             background-color: #B9CED8;
         }
-        .form-control{
-            border:none;
+
+        .form-control {
+            border: none;
         }
+
         .hover-effect {
             background-color: #B9CED8;
-            font-weight:bolder;
+            font-weight: bolder;
             transition: background-color 0.3s ease;
         }
 
@@ -124,14 +129,16 @@
         }
 
 
-        .picNoReservation{
-            width:50%;
+        .picNoReservation {
+            width: 50%;
         }
     </style>
 }
 
 @section Scripts {
     <script>
+        const spinner = document.getElementById('spinner');
+        const content = document.getElementById('content');
         const name = document.getElementById('name');
         const intro = document.getElementById('intro');
         const photo = document.getElementById('photo');
@@ -146,7 +153,7 @@
         const memberID = 2;
         const coachID = 6;
         let pageParams = { coachId: coachID, keyword: "" };
-        
+
         //頁面載入時執行
         document.addEventListener('DOMContentLoaded', async () => {
             let response = await fetch(`https://localhost:7199/api/Coach/${coachID}`);
@@ -166,6 +173,12 @@
             loadTotalCourse(data.reserveDetailDtos);
             findCourse();
 
+            //內容讀取完再顯示
+            setTimeout(function () {
+                spinner.style.display = 'none';
+                content.style.display = 'block';
+            }, 1000);
+            
             //啟用ToolTip
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -205,34 +218,34 @@
             data.reserveDetailDtos.forEach(item => {
                 count++;
                 innerHTML += `<tr>
-                                    <td class="align-content-center">${count}</td>
-                                    <td class="align-content-center">${item.class}</td>
-                                    <td class="align-content-center">${item.coach}</td>
-                                    <td class="align-content-center">${item.time.date}</td>
-                                    <td class="align-content-center">${item.courseFee}</td>
-                                    <td class="align-content-center">
-                                        <div class="w-75" >
-                                            <a class="btn btn-danger mx-2" href="${deleteUrl}${item.reserveId}">
-                                                <i class="bi bi-trash3"></i>取消
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>`
+                                                    <td class="align-content-center">${count}</td>
+                                                    <td class="align-content-center">${item.class}</td>
+                                                    <td class="align-content-center">${item.coach}</td>
+                                                    <td class="align-content-center">${item.time.date}</td>
+                                                    <td class="align-content-center">${item.courseFee}</td>
+                                                    <td class="align-content-center">
+                                                        <div class="w-75" >
+                                                            <a class="btn btn-danger mx-2" href="${deleteUrl}${item.reserveId}">
+                                                                <i class="bi bi-trash3"></i>取消
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>`
             });
             const outerHTML = `<h3 class="fw-bolder">我的課程</h3>
-                                <table class="table table-hover">
-                                    <thead>
-                                          <tr class="table-primary">
-                                            <th scope="col">編號</th>
-                                            <th scope="col">課程名稱</th>
-                                            <th scope="col">教練</th>
-                                            <th scope="col">日期</th>
-                                            <th scope="col">費用</th>
-                                            <th scope="col">操作</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>${innerHTML}</tbody>
-                                </table>`                
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                          <tr class="table-primary">
+                                                            <th scope="col">編號</th>
+                                                            <th scope="col">課程名稱</th>
+                                                            <th scope="col">教練</th>
+                                                            <th scope="col">日期</th>
+                                                            <th scope="col">費用</th>
+                                                            <th scope="col">操作</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>${innerHTML}</tbody>
+                                                </table>`
             displayDiv.innerHTML = outerHTML;
         })
 
@@ -250,44 +263,44 @@
             data.reserveDetailDtos.forEach(item => {
                 count++;
                 innerHTML += `<tr>
-                                    <td class="align-content-center">${count}</td>
-                                    <td class="align-content-center">${item.class}</td>
-                                    <td class="align-content-center">${item.coach}</td>
-                                    <td class="align-content-center">${item.time.date}</td>
-                                    <td class="align-content-center">${item.courseFee}</td>
-                                    <td class="align-content-center">
-                                        <div class="w-75" >
-                                            <a class="btn btn-primary mx-2" href="${updateUrl}${item.reserveId}">
-                                                <i class="bi bi-pencil-square"></i>編輯
-                                            </a>
-                                            <a class="btn btn-danger mx-2" href="${deleteUrl}${item.reserveId}">
-                                                <i class="bi bi-trash3"></i>刪除
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>`
+                                                    <td class="align-content-center">${count}</td>
+                                                    <td class="align-content-center">${item.class}</td>
+                                                    <td class="align-content-center">${item.coach}</td>
+                                                    <td class="align-content-center">${item.time.date}</td>
+                                                    <td class="align-content-center">${item.courseFee}</td>
+                                                    <td class="align-content-center">
+                                                        <div class="w-75" >
+                                                            <a class="btn btn-primary mx-2" href="${updateUrl}${item.reserveId}">
+                                                                <i class="bi bi-pencil-square"></i>編輯
+                                                            </a>
+                                                            <a class="btn btn-danger mx-2" href="${deleteUrl}${item.reserveId}">
+                                                                <i class="bi bi-trash3"></i>刪除
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>`
             });
             const outerHTML = `<h3 class="fw-bolder">我的訂單</h3>
-                                <table class="table table-hover">
-                                    <thead>
-                                         <tr class="table-primary">
-                                            <th scope="col">編號</th>
-                                            <th scope="col">課程名稱</th>
-                                            <th scope="col">教練</th>
-                                            <th scope="col">日期</th>
-                                            <th scope="col">費用</th>
-                                            <th scope="col">操作</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>${innerHTML}</tbody>
-                                </table>
-                                <div>
-                                    <a class="btn btn-primary" href="${linePayUrl}${memberID}">前往購物車</a>
-                                </div>`;
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                         <tr class="table-primary">
+                                                            <th scope="col">編號</th>
+                                                            <th scope="col">課程名稱</th>
+                                                            <th scope="col">教練</th>
+                                                            <th scope="col">日期</th>
+                                                            <th scope="col">費用</th>
+                                                            <th scope="col">操作</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>${innerHTML}</tbody>
+                                                </table>
+                                                <div>
+                                                    <a class="btn btn-primary" href="${linePayUrl}${memberID}">前往購物車</a>
+                                                </div>`;
             displayDiv.innerHTML = outerHTML;
 
         });
-            
+
         //更改大頭照
         photo.addEventListener('change', (event) => {
             const file = event.target.files[0];
@@ -305,7 +318,7 @@
             findCourse();
         });
         //開課
-        async function findCourse(){
+        async function findCourse() {
             const updateUrl = '@Url.Content("~/Schdule/Update/")';
             const deleteUrl = '@Url.Content("~/Schdule/Delete/")';
             let response = await fetch("https://localhost:7199/api/Coach/Pagination", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pageParams) });
@@ -320,61 +333,61 @@
                 data = await response.json();
                 count++;
                 innerHTML += `<tr>
-                                    <td class="align-content-center">${count}</td>
-                                    <td class="align-content-center">${item.class}</td>
-                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
-                                    <td class="align-content-center">${item.courseDate}</td>
-                                    <td class="align-content-center">${item.field}</td>
-                                    <td class="align-content-center">${data.currentNumberOfStudent}/${item.maxStudent}</td>
-                                    <td class="align-content-center">NT${item.classPayment}</td>
-                                    <td class="align-content-center">
-                                        <div class="w-75" >
-                                            <button class="btn btn-success mx-2">
-                                            <i class="bi bi-check2"></i>招生中
-                                        </div>
-                                    </td>
-                                </tr>`
+                                                    <td class="align-content-center">${count}</td>
+                                                    <td class="align-content-center">${item.class}</td>
+                                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
+                                                    <td class="align-content-center">${item.courseDate}</td>
+                                                    <td class="align-content-center">${item.field}</td>
+                                                    <td class="align-content-center">${data.currentNumberOfStudent}/${item.maxStudent}</td>
+                                                    <td class="align-content-center">NT${item.classPayment}</td>
+                                                    <td class="align-content-center">
+                                                        <div class="w-75" >
+                                                            <button class="btn btn-success mx-2">
+                                                            <i class="bi bi-check2"></i>招生中
+                                                        </div>
+                                                    </td>
+                                                </tr>`
             };
             //課程審核中
             for (const item of reviewCourse) {
                 count++;
                 innerHTML += `<tr>
-                                    <td class="align-content-center">${count}</td>
-                                    <td class="align-content-center">${item.class}</td>
-                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
-                                    <td class="align-content-center">${item.courseDate}</td>
-                                    <td class="align-content-center">${item.field}</td>
-                                    <td class="align-content-center">${data.currentNumberOfStudent}/${item.maxStudent}</td>
-                                    <td class="align-content-center">NT${item.classPayment}</td>
-                                    <td class="align-content-center">
-                                        <div class="w-75" >
-                                                <button class="btn btn-light mx-2" disabled>
-                                                <i class="bi bi-hourglass-split"></i>審核中
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>`
+                                                    <td class="align-content-center">${count}</td>
+                                                    <td class="align-content-center">${item.class}</td>
+                                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
+                                                    <td class="align-content-center">${item.courseDate}</td>
+                                                    <td class="align-content-center">${item.field}</td>
+                                                    <td class="align-content-center">${data.currentNumberOfStudent}/${item.maxStudent}</td>
+                                                    <td class="align-content-center">NT${item.classPayment}</td>
+                                                    <td class="align-content-center">
+                                                        <div class="w-75" >
+                                                                <button class="btn btn-light mx-2" disabled>
+                                                                <i class="bi bi-hourglass-split"></i>審核中
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>`
             };
             const OpenedCourseHtml = `<div class="d-flex flex-row mb-3 justify-content-between">
-                                            <h3 class="fw-bolder">已開課程</h3>
-                                            <input class="form-control me-2 border w-25" id="keywordSearch" type="search" placeholder="課程搜尋" aria-label="Search" autocomplete="off">
-                                     </div>
-                                        <table class="table table-hover">
-                                            <thead>
-                                                 <tr class="table-primary">
-                                                    <th scope="col">編號</th>
-                                                    <th scope="col">課程名稱</th>
-                                                    <th scope="col">時間</th>
-                                                    <th scope="col">日期</th>
-                                                    <th scope="col">教室</th>
-                                                    <th scope="col">報名人數</th>
-                                                    <th scope="col">課程費用/每位</th>
-                                                    <th scope="col">狀態</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>${innerHTML}</tbody>
-                                        </table>
-                                            <a href="@Url.Content("~/Coach/CreateCourse")" class="btn btn-primary">新增課程</a>`;
+                                                            <h3 class="fw-bolder">已開課程</h3>
+                                                            <input class="form-control me-2 border w-25" id="keywordSearch" type="search" placeholder="課程搜尋" aria-label="Search" autocomplete="off">
+                                                     </div>
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                 <tr class="table-primary">
+                                                                    <th scope="col">編號</th>
+                                                                    <th scope="col">課程名稱</th>
+                                                                    <th scope="col">時間</th>
+                                                                    <th scope="col">日期</th>
+                                                                    <th scope="col">教室</th>
+                                                                    <th scope="col">報名人數</th>
+                                                                    <th scope="col">課程費用/每位</th>
+                                                                    <th scope="col">狀態</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>${innerHTML}</tbody>
+                                                        </table>
+                                                            <a href="@Url.Content("~/Coach/CreateCourse")" class="btn btn-primary">新增課程</a>`;
             displayDiv.innerHTML = OpenedCourseHtml;
             let keywordSearch = document.getElementById('keywordSearch');
             keywordSearch.addEventListener('keydown', async (event) => {
@@ -399,30 +412,30 @@
             for (const item of paid) {
                 count++;
                 innerHTML += `<tr>
-                                    <td class="align-content-center">${count}</td>
-                                    <td class="align-content-center">${item.field}</td>
-                                    <td class="align-content-center">NT${item.fieldPayment}</td>
-                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
-                                    <td class="align-content-center">${item.courseDate}</td>
-                                    <td class="align-content-center">${item.city}${item.region}${item.gym}${item.floor}</td>
-                                    <td class="align-content-center"><button type="button" class="btn btn-success">已付款</button></td>
-                                </tr>`
+                                                    <td class="align-content-center">${count}</td>
+                                                    <td class="align-content-center">${item.field}</td>
+                                                    <td class="align-content-center">NT${item.fieldPayment}</td>
+                                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
+                                                    <td class="align-content-center">${item.courseDate}</td>
+                                                    <td class="align-content-center">${item.city}${item.region}${item.gym}${item.floor}</td>
+                                                    <td class="align-content-center"><button type="button" class="btn btn-success">已付款</button></td>
+                                                </tr>`
             };
             const PaidFieldHtml = `<h3 class="fw-bolder">已成功付款</h3>
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr class="table-primary">
-                                                <th scope="col">編號</th>
-                                                <th scope="col">場地名稱</th>
-                                                <th scope="col">場地費用/小時</th>
-                                                <th scope="col">時間</th>
-                                                <th scope="col">日期</th>
-                                                <th scope="col">場館</th>
-                                                <th scope="col">付款狀態</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>${innerHTML}</tbody>
-                                    </table>`;
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr class="table-primary">
+                                                                <th scope="col">編號</th>
+                                                                <th scope="col">場地名稱</th>
+                                                                <th scope="col">場地費用/小時</th>
+                                                                <th scope="col">時間</th>
+                                                                <th scope="col">日期</th>
+                                                                <th scope="col">場館</th>
+                                                                <th scope="col">付款狀態</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>${innerHTML}</tbody>
+                                                    </table>`;
             innerHTML = "";
             count = 0;
             const updateUrl = '@Url.Content("~/Field/UpdateField/")';
@@ -430,41 +443,41 @@
             for (const item of unpaid) {
                 count++;
                 innerHTML += `<tr>
-                                    <td class="align-content-center">${count}</td>
-                                    <td class="align-content-center">${item.field}</td>
-                                    <td class="align-content-center">NT${item.fieldPayment}</td>
-                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
-                                    <td class="align-content-center">${item.courseDate}</td>
-                                    <td class="align-content-center">${item.city}${item.region}${item.gym}${item.floor}</td>
-                                    <td class="align-content-center">
-                                        <button type="button" class="btn btn-secondary">待付款</button>
-                                    </td>
-                                    <td class="align-content-center">
-                                        <a class="btn btn-primary mx-2" href="${updateUrl}${item.fieldReserveId}">
-                                                <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-danger deleteUnPaidField" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-id="${item.fieldReserveId}"><i class="bi bi-trash"></i></button>
-                                    </td>
-                                </tr>`
+                                                    <td class="align-content-center">${count}</td>
+                                                    <td class="align-content-center">${item.field}</td>
+                                                    <td class="align-content-center">NT${item.fieldPayment}</td>
+                                                    <td class="align-content-center">${item.courseStartTime}~${item.courseEndTime}</td>
+                                                    <td class="align-content-center">${item.courseDate}</td>
+                                                    <td class="align-content-center">${item.city}${item.region}${item.gym}${item.floor}</td>
+                                                    <td class="align-content-center">
+                                                        <button type="button" class="btn btn-secondary">待付款</button>
+                                                    </td>
+                                                    <td class="align-content-center">
+                                                        <a class="btn btn-primary mx-2" href="${updateUrl}${item.fieldReserveId}">
+                                                                <i class="bi bi-pencil-square"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-danger deleteUnPaidField" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" data-id="${item.fieldReserveId}"><i class="bi bi-trash"></i></button>
+                                                    </td>
+                                                </tr>`
             };
-            
+
             const UnPaidFieldHtml = `<h3 class="fw-bolder">待付款場地</h3>
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr class="table-primary">
-                                                <th scope="col">編號</th>
-                                                <th scope="col">場地名稱</th>
-                                                <th scope="col">場地費用/小時</th>
-                                                <th scope="col">時間</th>
-                                                <th scope="col">日期</th>
-                                                <th scope="col">場館</th>
-                                                <th scope="col">付款狀態</th>
-                                                <th scope="col">操作</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>${innerHTML}</tbody>
-                                    </table>
-                                    <a href='@Url.Content("~/LinePay/CourseShoppingCart/")${coachID}' class="btn btn-primary" id="btnPay">付款去</a>`;
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr class="table-primary">
+                                                                <th scope="col">編號</th>
+                                                                <th scope="col">場地名稱</th>
+                                                                <th scope="col">場地費用/小時</th>
+                                                                <th scope="col">時間</th>
+                                                                <th scope="col">日期</th>
+                                                                <th scope="col">場館</th>
+                                                                <th scope="col">付款狀態</th>
+                                                                <th scope="col">操作</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>${innerHTML}</tbody>
+                                                    </table>
+                                                    <a href='@Url.Content("~/LinePay/CourseShoppingCart/")${coachID}' class="btn btn-primary" id="btnPay">付款去</a>`;
             displayDiv.innerHTML = PaidFieldHtml + UnPaidFieldHtml;
             if (unpaid.length == 0) {
                 displayDiv.innerHTML += `<div><img src='@Url.Content("~/images/noreservation.png")' class="picNoReservation"/></div>`;
@@ -502,11 +515,11 @@
                             showField();
                         }
                     }
-                    
+
                 })
             });
         }
 
-        
+
     </script>
 }
